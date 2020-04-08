@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_network_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:isScrollContainer="true"
+    tools:context=".FragmentNetworkInfo">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+        android:id="@+id/textViewNetworkInfo_ro"
+        android:layout_width="190dp"
+        android:layout_height="287dp"
+        android:layout_gravity="center_horizontal|fill_horizontal"
+        android:gravity="right"
+        android:textIsSelectable="true"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="160dp"
+        android:layout_height="161dp"
+        android:layout_gravity="center|center_horizontal"
+        android:gravity="left"
+        android:keepScreenOn="false"
+        app:srcCompat="@mipmap/app_icon_antenna"
+        tools:src="@mipmap/app_icon_antenna" />
+
+    <TextView
+        android:id="@+id/textViewNetworkInfo_rw"
+        android:layout_width="190dp"
+        android:layout_height="287dp"
+        android:layout_gravity="right"
+        android:justificationMode="inter_word"
+        android:textSize="14sp" />
+
+</FrameLayout>
