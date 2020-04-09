@@ -1,0 +1,7 @@
+funciona en linux y windows, se debe tener configurado un mysql
+pip install flask
+pip install flask_table
+pip install flaskext.mysql
+pip install flask_table
+pip install pymysql
+pip install flaskext.mysql
