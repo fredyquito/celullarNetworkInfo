@@ -19,11 +19,12 @@ public class ScanMetadata {
     private int downloadMovileSpeed;
     private int uploadMovileSpeed;
     private int wifiSpeed;
+    private int isRegistered;
 
 
     public ScanMetadata(String countryISO,String operatorId, String operatorName,String isConected, String phoneSignalType,
                         String phoneNetworType, String signalQuality, String networkConectivityType, int phoneSignalStrength, int  downloadMovileSpeed,
-                        int uploadMovileSpeed,int wifiSpeed ) {
+                        int uploadMovileSpeed,int wifiSpeed, int isRegistered ) {
         this.countryISO = countryISO;
         this.operatorId = operatorId;
         this.operatorName = operatorName;
@@ -36,24 +37,21 @@ public class ScanMetadata {
         this.downloadMovileSpeed = downloadMovileSpeed;
         this.uploadMovileSpeed = uploadMovileSpeed;
         this.wifiSpeed = wifiSpeed;
+        this.isRegistered = isRegistered;
     }
 
     public String getCountryISO() {
         return countryISO;
     }
-
     public String getOperatorId() {
         return operatorId;
     }
-
     public String getOperatorName() {
         return operatorName;
     }
-
     public String getIsConected() {
         return isConected;
     }
-
     public String getPhoneSignalType() {
         return phoneSignalType;
     }
@@ -78,6 +76,9 @@ public class ScanMetadata {
     public int getWifiSpeed() {
         return wifiSpeed;
     }
+    public int isRegistered(){
+        return isRegistered;
+    }
 
     public ContentValues toContentValues() {
         Log.d("SqlLite","entra a toContenCalues en ScanMetaData");
@@ -94,6 +95,7 @@ public class ScanMetadata {
         values.put(ScanContract.ScanEntry.DOWNLOADMOVILESPEED, downloadMovileSpeed);
         values.put(ScanContract.ScanEntry.UPLOADMOVILSPEED, uploadMovileSpeed);
         values.put(ScanContract.ScanEntry.WIFISPEED, wifiSpeed);
+        values.put(ScanContract.ScanEntry.ISREGISTERED, isRegistered);
         return values;
     }
 

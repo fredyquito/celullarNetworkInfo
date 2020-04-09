@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 //import SQLiteOpenHelper;
 
 public class ScanDbHelper extends SQLiteOpenHelper {
@@ -38,6 +40,7 @@ public class ScanDbHelper extends SQLiteOpenHelper {
                 + ScanContract.ScanEntry.DOWNLOADMOVILESPEED + " INT NOT NULL,"
                 + ScanContract.ScanEntry.UPLOADMOVILSPEED + " INT NOT NULL,"
                 + ScanContract.ScanEntry.WIFISPEED + " INT NOT NULL,"
+                + ScanContract.ScanEntry.ISREGISTERED + " INT NOT NULL,"
                 + "UNIQUE (" + ScanContract.ScanEntry._ID + "))");
 
     }
@@ -67,7 +70,6 @@ public class ScanDbHelper extends SQLiteOpenHelper {
     public void printScanQuery(Cursor queryCursor){
         Log.d("SqlLite","Entra a printScanQuery");
 
-
         while(queryCursor.moveToNext()){
             String bdd_id = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry._ID));
             String countryISO = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.COUNTRYISO));
@@ -82,8 +84,9 @@ public class ScanDbHelper extends SQLiteOpenHelper {
             String downloadMovileSpeed = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.DOWNLOADMOVILESPEED));
             String uploadMovileSpeed = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.UPLOADMOVILSPEED));
             String wifiSpeed = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.WIFISPEED));
+            String isRegistered = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.ISREGISTERED));
             Log.d("printScanQuery ","valor es "+bdd_id+
-                    ""+countryISO+
+                    " "+countryISO+
                     " "+operatorId+
                     " "+operatorName+
                     " "+isConected+
@@ -94,7 +97,8 @@ public class ScanDbHelper extends SQLiteOpenHelper {
                     " "+phoneSignalStrength+
                     " "+downloadMovileSpeed+
                     " "+uploadMovileSpeed+
-                    " "+wifiSpeed);
+                    " "+wifiSpeed+
+                    " is registered "+isRegistered);
         }
     }
 
@@ -107,6 +111,75 @@ public class ScanDbHelper extends SQLiteOpenHelper {
                 null,
                 null);
         return c;
+    }
+
+    public void updateIsRegisteredById(String scanId) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(ScanContract.ScanEntry.ISREGISTERED,"1");
+        int c = getWritableDatabase().update(ScanContract.ScanEntry.TABLE_NAME,
+                cv,
+                ScanContract.ScanEntry._ID + " LIKE ?",new String[]{scanId});
+        Log.d("updateIsRegisteredByID","el valor de la consulta es "+c);
+    }
+
+    public Cursor getScanInfoByIsRegistered(int isRegistered) {
+        Cursor c = getReadableDatabase().query(
+                ScanContract.ScanEntry.TABLE_NAME,
+                null,
+                ScanContract.ScanEntry.ISREGISTERED + " LIKE ?",new String[]{String.valueOf(isRegistered)},
+                null,
+                null,
+                null);
+        return c;
+    }
+
+    public ArrayList<String> getScanInfoInJson(Cursor getScanInfoByIsRegistered){
+        ArrayList<String> jsonQueryFormat = new ArrayList<String>();
+        int contador = 0;
+        Log.d("getScanInfoInJson","Entra al metodo");
+
+
+        while(getScanInfoByIsRegistered.moveToNext()){
+            Log.d("getScanInfoInJson","Entra al while");
+            String scan_id = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry._ID));
+            String countryISO = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.COUNTRYISO));
+            String operatorId = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.OPERATORID));
+            String operatorName = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.OPERATORNAME));
+            String isConected = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.ISCONECTED));
+            String phoneSignalType = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.PHONESIGNALTYPE));
+            String phoneNetworType = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.PHONENETWORKTYPE));
+            String signalQuality = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.SIGNALQUALITY));
+            String networkConectivityType = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.NETWORKCONECTIVITYTYPE));
+            String phoneSignalStrength = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.PHONESIGNALSTRENGTH));
+            String downloadMovileSpeed = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.DOWNLOADMOVILESPEED));
+            String uploadMovileSpeed = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.UPLOADMOVILSPEED));
+            String wifiSpeed = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.WIFISPEED));
+            String isRegistered = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.ISREGISTERED));
+            if (Integer.parseInt(isRegistered) == 0 ){
+                Log.d("getScanInfoInJson","Entra al if");
+                Log.d("getScanInfoInJson","antes contador es "+contador);
+                jsonQueryFormat.add("{\"countryiso\":\""+countryISO+"\"," +
+                        "\"operatorid\":\""+operatorId+"\"," +
+                        "\"operatorname\":\""+operatorName+"\"," +
+                        "\"isconected\":\""+isConected+"\"," +
+                        "\"phonesignaltype\":\""+phoneSignalType+"\"," +
+                        "\"phonenetworktype\":\""+phoneNetworType+"\"," +
+                        "\"signalquality\":\""+signalQuality+"\"," +
+                        "\"networkconectivitytype\":\""+networkConectivityType+"\"," +
+                        "\"phonesignalstrength\":\""+phoneSignalStrength+"\"," +
+                        "\"downloadmovilespeed\":\""+downloadMovileSpeed+"\"," +
+                        "\"uploadmovilspeed\":\""+uploadMovileSpeed+"\"," +
+                        "\"wifispeed\":\""+wifiSpeed+"\"}");
+
+
+                updateIsRegisteredById(scan_id);
+                Log.d("getScanInfoInJson","despues contador es "+contador);
+                Log.d("getScanInfoInJson","jsonQueryFormat es "+jsonQueryFormat.get(contador));
+                contador = contador+1;
+            }
+        }
+        return jsonQueryFormat;
     }
 
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 
 /**
@@ -36,6 +37,7 @@ public class FragmentNetworkInfo extends Fragment {
     private final int REQUEST_PERMISSION_PHONE_STATE=1;
     private ScanDbHelper scanDbHelper;
     private ScanMetadata scanMetadata;
+    private Cursor cursorQuery;
 
 
     public FragmentNetworkInfo() {
@@ -109,6 +111,8 @@ public class FragmentNetworkInfo extends Fragment {
             uploadMovileSpeed = speedBandwithMovile.second.intValue();
         }
 
+        int isRegistered = 0;
+
 
         textViewLocationInfo_ro.setText(
                         "country ISO \n" +
@@ -138,50 +142,32 @@ public class FragmentNetworkInfo extends Fragment {
                         ""+wifiSpeed);
 
         scanMetadata = new ScanMetadata(countryISO,operatorId,operatorName,isConected,phoneSignalType,phoneNetworType,
-                signalQuality,networkConectivityType,phoneSignalStrength,downloadMovileSpeed,uploadMovileSpeed,wifiSpeed);
+                signalQuality,networkConectivityType,phoneSignalStrength,downloadMovileSpeed,uploadMovileSpeed,wifiSpeed, isRegistered);
 
         scanDbHelper = new ScanDbHelper(getContext());
         scanDbHelper.saveSqlScan(scanMetadata);
 
-        Cursor cursorQuery = scanDbHelper.getAllScanInfo();
+        cursorQuery = scanDbHelper.getAllScanInfo();
         scanDbHelper.printScanQuery(cursorQuery);
 
         if(networkConectivityType == "WIFI"){
-            String jsonInputString = "{\"countryiso\":\""+countryISO+"\"," +
-                    "\"operatorid\":\""+operatorId+"\"," +
-                    "\"operatorname\":\""+operatorName+"\"," +
-                    "\"isconected\":\""+isConected+"\"," +
-                    "\"phonesignaltype\":\""+phoneSignalType+"\"," +
-                    "\"phonenetworktype\":\""+phoneNetworType+"\"," +
-                    "\"signalquality\":\""+signalQuality+"\"," +
-                    "\"networkconectivitytype\":\""+networkConectivityType+"\"," +
-                    "\"phonesignalstrength\":\""+phoneSignalStrength+"\"," +
-                    "\"downloadmovilespeed\":\""+downloadMovileSpeed+"\"," +
-                    "\"uploadmovilspeed\":\""+uploadMovileSpeed+"\"," +
-                    "\"wifispeed\":\""+wifiSpeed+"\"}";
 
-            Log.d("URL_JSON","Entra a HttpJsonPost en fragmentNetwork");
-            HttpJsonPost jsonPost = new HttpJsonPost();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Log.d("URL_JSON","Crea y envia jsonInputString "+jsonInputString);
-                String response = jsonPost.postJsonToServer("http://192.168.1.50:5005/add", jsonInputString);
-                Log.d("Finall URL Post","mensaje es "+response);
+            cursorQuery = scanDbHelper.getScanInfoByIsRegistered(0);
+            ArrayList<String> jsonInputString  =  scanDbHelper.getScanInfoInJson(cursorQuery);
+            for(int i = 0 ; i < jsonInputString.size(); i++){
+                Log.d("URL_JSON","Entra a HttpJsonPost en fragmentNetwork valor de i es "+i);
+                HttpJsonPost jsonPost = new HttpJsonPost();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    Log.d("URL_JSON","Crea y envia jsonInputString "+jsonInputString.get(i));
+                    String response = jsonPost.postJsonToServer("http://192.168.1.50:5005/add", jsonInputString.get(i));
+                    Log.d("Finall URL Post","mensaje es "+response);
+                }
             }
+
+
         }else if(networkConectivityType == "MOBILE"){
 
         }
-
-
-
-
-
-
-
-
         return root;
     }
-
-
-
-
 }
