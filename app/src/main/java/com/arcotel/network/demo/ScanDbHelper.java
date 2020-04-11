@@ -114,12 +114,10 @@ public class ScanDbHelper extends SQLiteOpenHelper {
     }
 
     public void updateIsRegisteredById(String scanId) {
-
         ContentValues cv = new ContentValues();
         cv.put(ScanContract.ScanEntry.ISREGISTERED,"1");
         int c = getWritableDatabase().update(ScanContract.ScanEntry.TABLE_NAME,
-                cv,
-                ScanContract.ScanEntry._ID + " LIKE ?",new String[]{scanId});
+                cv,ScanContract.ScanEntry._ID + " LIKE ?",new String[]{scanId});
         Log.d("updateIsRegisteredByID","el valor de la consulta es "+c);
     }
 

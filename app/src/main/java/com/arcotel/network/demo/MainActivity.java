@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         String permissionAFLocation = Manifest.permission.ACCESS_FINE_LOCATION;
         String permissionInternet = Manifest.permission.INTERNET;
         String permissionAccessWifi = Manifest.permission.ACCESS_WIFI_STATE;
+        String readPhoneState = Manifest.permission.READ_PHONE_STATE;
         Log.d("Pre-permiso","la variable permoso tiene: "+permissionACLocation);
         Log.d("Pre-permiso","la variable permoso tiene: "+permissionAFLocation);
         Log.d("Pre-permiso","la variable permoso tiene: "+permissionInternet);
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         this.showPhoneStatePermission(permissionAFLocation);
         this.showPhoneStatePermission(permissionInternet);
         this.showPhoneStatePermission(permissionAccessWifi);
+        this.showPhoneStatePermission(readPhoneState);
 
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());

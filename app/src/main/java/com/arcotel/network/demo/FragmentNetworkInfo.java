@@ -89,12 +89,20 @@ public class FragmentNetworkInfo extends Fragment {
 
         ScanCellularActivity scanCellularActivity = new ScanCellularActivity(fragmentNetworkContext);
         String countryISO = scanCellularActivity.getDevCountryIso();
+        String deviceIMEI = scanCellularActivity.getDeviceIMEI();
         String operatorId = scanCellularActivity.getDevOperatorID();
         String operatorName = scanCellularActivity.getDevOperatorName();
         String isConected = scanCellularActivity.getDevIsConected();
         String phoneSignalType = scanCellularActivity.getPhoneSignalType();
         String phoneNetworType = scanCellularActivity.getPhoneNetworType();
         int phoneSignalStrength = scanCellularActivity.getDevStrengthSignal();
+        int phoneStrengthAsu = 20;
+        int phoneBand = 5;
+        int phoneLAC = 33101;
+        int phoneUCID = 620144;
+        int phoneCID = 30320;
+        int phoneRNC = 9;
+        int phonePSC = 420;
         String signalQuality = scanCellularActivity.getSignalQuality(phoneSignalStrength);
         ScanInternetSpeed scanInternetSpeed = new ScanInternetSpeed(fragmentNetworkContext);
 
@@ -106,7 +114,10 @@ public class FragmentNetworkInfo extends Fragment {
         if(networkConectivityType == "WIFI"){
             wifiSpeed = scanInternetSpeed.checkWifiInternetSpeed();
         }else if(networkConectivityType == "MOBILE"){
-            Pair<Integer, Integer> speedBandwithMovile = scanInternetSpeed.checkMovileInternetSpeed();
+            Pair<Integer, Integer> speedBandwithMovile = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                speedBandwithMovile = scanInternetSpeed.checkMovileInternetSpeed();
+            }
             downloadMovileSpeed = speedBandwithMovile.first.intValue();
             uploadMovileSpeed = speedBandwithMovile.second.intValue();
         }
@@ -116,12 +127,20 @@ public class FragmentNetworkInfo extends Fragment {
 
         textViewLocationInfo_ro.setText(
                         "country ISO \n" +
-                        "ID de operador \n" +
+                        "Device IMEI \n" +
+                        "MCC/MNC \n" +
                         "Nombre de operador \n" +
                         "Estado Conexión móvil \n" +
                         "Tipo de teléfono \n" +
                         "Tipo de red móvil \n" +
                         "Potencia de la señal \n" +
+                        "ASU \n" +
+                        "Band \n" +
+                        "LAC \n" +
+                        "UCID \n" +
+                        "CID \n" +
+                        "RNC \n" +
+                        "PSC \n" +
                         "Calidad de la señal \n" +
                         "Tipo de conexión (Internet) \n" +
                         "Mobile Upload Kbps \n" +
@@ -129,12 +148,20 @@ public class FragmentNetworkInfo extends Fragment {
                         "Wifi Speed Mbps ");
         textViewLocationInfo_rw.setText(
                         ""+countryISO+"\n" +
+                        ""+deviceIMEI+"\n" +
                         ""+operatorId+"\n" +
                         ""+operatorName+"\n" +
                         ""+isConected+"\n" +
                         ""+phoneSignalType+"\n" +
                         ""+phoneNetworType+"\n" +
                         ""+phoneSignalStrength+"\n" +
+                        ""+phoneStrengthAsu+"\n" +
+                        ""+phoneBand+"\n" +
+                        ""+phoneLAC+"\n" +
+                        ""+phoneUCID+"\n" +
+                        ""+phoneCID+"\n" +
+                        ""+phoneRNC+"\n" +
+                        ""+phonePSC+"\n" +
                         ""+signalQuality+"\n"+
                         ""+networkConectivityType+"\n" +
                         ""+uploadMovileSpeed+"\n" +

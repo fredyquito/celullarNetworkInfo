@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,6 +168,7 @@ public class FragmentLocationDev extends Fragment {
                 default:
                     locationAddress = null;
             }
+            Log.d("GeocoderHandler","entra a grocodehandler");
             tvAddress.setText(locationAddress);
         }
     }

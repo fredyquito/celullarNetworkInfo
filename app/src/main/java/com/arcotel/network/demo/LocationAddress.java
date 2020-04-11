@@ -36,7 +36,17 @@ public class LocationAddress {
                             sb.append(address.getAddressLine(i)).append("\n");
                         }
                         sb.append(address.getLocality()).append("\n");
+                        //sb.append(address.getPremises()).append("\n");
+                        sb.append(address.getAdminArea()).append("\n");
+                        sb.append(address.getCountryCode()).append("\n");
+                        sb.append(address.getFeatureName()).append("\n");
+                        //sb.append(address.getPhone()).append("\n");
+                        sb.append(address.getSubAdminArea()).append("\n");
+                        sb.append(address.getSubLocality()).append("\n");
+                        //sb.append(address.getSubThoroughfare()).append("\n");
+                        //sb.append(address.getThoroughfare()).append("\n");
                         sb.append(address.getPostalCode()).append("\n");
+                        //sb.append(address.getUrl()).append("\n");
                         sb.append(address.getCountryName());
                         result = sb.toString();
                     }

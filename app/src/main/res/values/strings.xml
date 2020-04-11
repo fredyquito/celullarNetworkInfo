@@ -32,6 +32,23 @@
     <string name="txtview_wifiDownloadSpeed_ro">Wifi speed Mbps</string>
     <string name="txtview_wifiDownloadSpeed_rw"></string>
 
+    <string name="get_information">Get Information</string>
+    <string name="hard_soft_info">Hardware and Software Information</string>
+    <string name="serial">SERIAL: </string>
+    <string name="model">MODEL: </string>
+    <string name="id">ID: </string>
+    <string name="manufacturer">MANUFACTURER: </string>
+    <string name="brand">BRAND: </string>
+    <string name="type">TYPE: </string>
+    <string name="user">USER: </string>
+    <string name="base">BASE: </string>
+    <string name="incremental">INCREMENTAL: </string>
+    <string name="sdk">SDK: </string>
+    <string name="board">BOARD: </string>
+    <string name="host">HOST: </string>
+    <string name="fingerprint">FINGERPRINT: </string>
+    <string name="versioncode">VERSION CODE: </string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -12,6 +12,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.provider.Settings;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
@@ -121,6 +122,18 @@ public class ScanCellularActivity {
                 break;
         }
         return varPhoneNetworType;
+    }
+
+
+    public String getDeviceIMEI() {
+        String deviceUniqueIdentifier = null;
+        if (null != telephonyManager) {
+            deviceUniqueIdentifier = telephonyManager.getDeviceId();
+        }
+        if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
+            deviceUniqueIdentifier = "No es posible conseguir IMEI";
+        }
+        return deviceUniqueIdentifier;
     }
 
     public String getDevIsConected() {
