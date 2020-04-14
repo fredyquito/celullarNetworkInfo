@@ -17,7 +17,7 @@ import com.arcotel.network.demo.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_network_info, R.string.tab_location_dev, R.string.tab_device_information};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_network_info, R.string.tab_location_dev, R.string.tab_device_information,R.string.tab_device_location};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -41,6 +41,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 3;
+        return 4;
     }
 }

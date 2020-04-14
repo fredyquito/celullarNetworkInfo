@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.arcotel.network.demo.FragmentDeviceInformation;
 import com.arcotel.network.demo.FragmentLocationDev;
+import com.arcotel.network.demo.FragmentMapLocation;
 import com.arcotel.network.demo.FragmentNetworkInfo;
 import com.arcotel.network.demo.R;
 
@@ -32,6 +33,7 @@ public class PlaceholderFragment extends Fragment {
             case 1: fragment = new FragmentNetworkInfo();break;
             case 2: fragment = new FragmentLocationDev();break;
             case 3: fragment = new FragmentDeviceInformation();break;
+            case 4: fragment = new FragmentMapLocation();break;
         }
         return fragment;
     }
@@ -53,7 +55,7 @@ public class PlaceholderFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         final TextView textView = root.findViewById(R.id.section_label);
-        pageViewModel.getText().observe(this, new Observer<String>() {
+        pageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

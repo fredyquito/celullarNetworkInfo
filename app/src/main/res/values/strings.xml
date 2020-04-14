@@ -3,6 +3,7 @@
     <string name="tab_network_info">Network</string>
     <string name="tab_location_dev">Localizacion</string>
     <string name="tab_device_information">Dev Info</string>
+    <string name="tab_device_location">Dev Location</string>
     <string name="txtview_OperatorID">ID de operador</string>
     <string name="txtview_OperatorName">Nombre Opera</string>
     <string name="txtview_Signal">Señal</string>
@@ -32,6 +33,8 @@
     <string name="txtview_wifiDownloadSpeed_ro">Wifi speed Mbps</string>
     <string name="txtview_wifiDownloadSpeed_rw"></string>
 
+    <string name="google_maps_key">AIzaSyBDmHDh1IcodepUcWz6mxGdxDOmLX8x76Y</string>
+
     <string name="get_information">Get Information</string>
     <string name="hard_soft_info">Hardware and Software Information</string>
     <string name="serial">SERIAL: </string>
@@ -51,4 +54,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps_get_location">Map</string>
 </resources>
