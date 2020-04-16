@@ -19,12 +19,15 @@ public class ScanMetadata {
     private int downloadMovileSpeed;
     private int uploadMovileSpeed;
     private int wifiSpeed;
+    private double latitude;
+    private double longitude;
     private int isRegistered;
+
 
 
     public ScanMetadata(String countryISO,String operatorId, String operatorName,String isConected, String phoneSignalType,
                         String phoneNetworType, String signalQuality, String networkConectivityType, int phoneSignalStrength, int  downloadMovileSpeed,
-                        int uploadMovileSpeed,int wifiSpeed, int isRegistered ) {
+                        int uploadMovileSpeed,int wifiSpeed, double latitude, double longitude, int isRegistered) {
         this.countryISO = countryISO;
         this.operatorId = operatorId;
         this.operatorName = operatorName;
@@ -37,7 +40,11 @@ public class ScanMetadata {
         this.downloadMovileSpeed = downloadMovileSpeed;
         this.uploadMovileSpeed = uploadMovileSpeed;
         this.wifiSpeed = wifiSpeed;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.isRegistered = isRegistered;
+
+
     }
 
     public String getCountryISO() {
@@ -76,9 +83,16 @@ public class ScanMetadata {
     public int getWifiSpeed() {
         return wifiSpeed;
     }
+    public double getLatitude(){
+        return latitude;
+    }
+    public double getLongitude(){
+        return longitude;
+    }
     public int isRegistered(){
         return isRegistered;
     }
+
 
     public ContentValues toContentValues() {
         Log.d("SqlLite","entra a toContenCalues en ScanMetaData");
@@ -95,6 +109,8 @@ public class ScanMetadata {
         values.put(ScanContract.ScanEntry.DOWNLOADMOVILESPEED, downloadMovileSpeed);
         values.put(ScanContract.ScanEntry.UPLOADMOVILSPEED, uploadMovileSpeed);
         values.put(ScanContract.ScanEntry.WIFISPEED, wifiSpeed);
+        values.put(ScanContract.ScanEntry.LATITUDE, latitude);
+        values.put(ScanContract.ScanEntry.LONGITUDE, longitude);
         values.put(ScanContract.ScanEntry.ISREGISTERED, isRegistered);
         return values;
     }

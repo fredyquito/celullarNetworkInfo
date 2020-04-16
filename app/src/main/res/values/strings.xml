@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Arcotel Network Demo</string>
     <string name="tab_network_info">Network</string>
-    <string name="tab_location_dev">Localizacion</string>
+    <string name="tab_location_dev">Speed Test</string>
     <string name="tab_device_information">Dev Info</string>
-    <string name="tab_device_location">Dev Location</string>
+    <string name="tab_device_location">Colectar</string>
     <string name="txtview_OperatorID">ID de operador</string>
     <string name="txtview_OperatorName">Nombre Opera</string>
     <string name="txtview_Signal">Señal</string>

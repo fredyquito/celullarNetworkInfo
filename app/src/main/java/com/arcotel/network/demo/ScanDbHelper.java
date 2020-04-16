@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.Nullable;
 
@@ -25,7 +26,7 @@ public class ScanDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("SqlLite","entra a creat la tabla"+ScanContract.ScanEntry.TABLE_NAME);
+        Log.d("SqlLite","entra a crear la tabla"+ScanContract.ScanEntry.TABLE_NAME);
         db.execSQL("CREATE TABLE " + ScanContract.ScanEntry.TABLE_NAME + " ("
                 + ScanContract.ScanEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + ScanContract.ScanEntry.COUNTRYISO + " TEXT NOT NULL,"
@@ -40,9 +41,10 @@ public class ScanDbHelper extends SQLiteOpenHelper {
                 + ScanContract.ScanEntry.DOWNLOADMOVILESPEED + " INT NOT NULL,"
                 + ScanContract.ScanEntry.UPLOADMOVILSPEED + " INT NOT NULL,"
                 + ScanContract.ScanEntry.WIFISPEED + " INT NOT NULL,"
+                + ScanContract.ScanEntry.LATITUDE + " DOUBLE NOT NULL,"
+                + ScanContract.ScanEntry.LONGITUDE + " DOUBLE NOT NULL,"
                 + ScanContract.ScanEntry.ISREGISTERED + " INT NOT NULL,"
                 + "UNIQUE (" + ScanContract.ScanEntry._ID + "))");
-
     }
 
     public void saveSqlScan(ScanMetadata scanMetadata) {
@@ -67,39 +69,28 @@ public class ScanDbHelper extends SQLiteOpenHelper {
                         null);
     }
 
-    public void printScanQuery(Cursor queryCursor){
-        Log.d("SqlLite","Entra a printScanQuery");
+    public ArrayList<String> getMapQuery(Cursor queryCursor){
+        Log.d("SqlLite","Entra a getMapQuery");
+
+        ArrayList<String> queryMapFormat = new ArrayList<String>();
+        int contador = 0;
 
         while(queryCursor.moveToNext()){
-            String bdd_id = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry._ID));
-            String countryISO = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.COUNTRYISO));
-            String operatorId = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.OPERATORID));
             String operatorName = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.OPERATORNAME));
-            String isConected = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.ISCONECTED));
-            String phoneSignalType = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.PHONESIGNALTYPE));
             String phoneNetworType = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.PHONENETWORKTYPE));
-            String signalQuality = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.SIGNALQUALITY));
-            String networkConectivityType = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.NETWORKCONECTIVITYTYPE));
             String phoneSignalStrength = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.PHONESIGNALSTRENGTH));
-            String downloadMovileSpeed = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.DOWNLOADMOVILESPEED));
-            String uploadMovileSpeed = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.UPLOADMOVILSPEED));
-            String wifiSpeed = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.WIFISPEED));
-            String isRegistered = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.ISREGISTERED));
-            Log.d("printScanQuery ","valor es "+bdd_id+
-                    " "+countryISO+
-                    " "+operatorId+
-                    " "+operatorName+
-                    " "+isConected+
-                    " "+phoneSignalType+
-                    " "+phoneNetworType+
-                    " "+signalQuality+
-                    " "+networkConectivityType+
-                    " "+phoneSignalStrength+
-                    " "+downloadMovileSpeed+
-                    " "+uploadMovileSpeed+
-                    " "+wifiSpeed+
-                    " is registered "+isRegistered);
+            String latitude = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.LATITUDE));
+            String longitude = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.LONGITUDE));
+            queryMapFormat.add(operatorName+":"
+                    +phoneNetworType+":"
+                    +phoneSignalStrength+":"
+                    +latitude+":"
+                    +longitude);
+
+            Log.d("getMapQuery","queryMapFormat es "+queryMapFormat.get(contador));
+            contador = contador+1;
         }
+        return queryMapFormat;
     }
 
     public Cursor getScanInfoById(String scanId) {
@@ -132,12 +123,11 @@ public class ScanDbHelper extends SQLiteOpenHelper {
         return c;
     }
 
+
     public ArrayList<String> getScanInfoInJson(Cursor getScanInfoByIsRegistered){
         ArrayList<String> jsonQueryFormat = new ArrayList<String>();
         int contador = 0;
         Log.d("getScanInfoInJson","Entra al metodo");
-
-
         while(getScanInfoByIsRegistered.moveToNext()){
             Log.d("getScanInfoInJson","Entra al while");
             String scan_id = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry._ID));
@@ -153,7 +143,10 @@ public class ScanDbHelper extends SQLiteOpenHelper {
             String downloadMovileSpeed = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.DOWNLOADMOVILESPEED));
             String uploadMovileSpeed = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.UPLOADMOVILSPEED));
             String wifiSpeed = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.WIFISPEED));
+            String latitude = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.LATITUDE));
+            String longitude = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.LONGITUDE));
             String isRegistered = getScanInfoByIsRegistered.getString(getScanInfoByIsRegistered.getColumnIndex(ScanContract.ScanEntry.ISREGISTERED));
+
             if (Integer.parseInt(isRegistered) == 0 ){
                 Log.d("getScanInfoInJson","Entra al if");
                 Log.d("getScanInfoInJson","antes contador es "+contador);
@@ -168,8 +161,9 @@ public class ScanDbHelper extends SQLiteOpenHelper {
                         "\"phonesignalstrength\":\""+phoneSignalStrength+"\"," +
                         "\"downloadmovilespeed\":\""+downloadMovileSpeed+"\"," +
                         "\"uploadmovilspeed\":\""+uploadMovileSpeed+"\"," +
-                        "\"wifispeed\":\""+wifiSpeed+"\"}");
-
+                        "\"wifispeed\":\""+wifiSpeed+"\"," +
+                        "\"latitude\":\""+latitude+"\"," +
+                        "\"longitude\":\""+longitude+"\"}");
 
                 updateIsRegisteredById(scan_id);
                 Log.d("getScanInfoInJson","despues contador es "+contador);

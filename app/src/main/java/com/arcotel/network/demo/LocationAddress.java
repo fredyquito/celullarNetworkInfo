@@ -1,12 +1,20 @@
 package com.arcotel.network.demo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
+
+import androidx.core.util.Pair;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,9 +23,24 @@ import java.util.Locale;
 
 public class LocationAddress {
 
-
+    private static AppLocationService appLocationService;
 
     private static final String TAG = "LocationAddress";
+    private double latitude;
+    private double longitude;
+    public Pair<Double, Double> getLatLongFromLocation(final Context context){
+
+        appLocationService = new AppLocationService(context);
+        Location location = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+             latitude = location.getLatitude();
+             longitude = location.getLongitude();
+             }
+        else {
+                showSettingsAlert(context);
+        }
+        return new Pair <Double, Double> (latitude, longitude);
+    }
 
     public static void getAddressFromLocation(final double latitude, final double longitude,
                                               final Context context, final Handler handler) {
@@ -75,5 +98,25 @@ public class LocationAddress {
             }
         };
         thread.start();
+    }
+
+    public static void showSettingsAlert(final Context context) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle("SETTINGS");
+        alertDialog.setMessage("Enable Location Provider! Go to settings menu?");
+        alertDialog.setPositiveButton("Settings",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        context.startActivity(intent);
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 }

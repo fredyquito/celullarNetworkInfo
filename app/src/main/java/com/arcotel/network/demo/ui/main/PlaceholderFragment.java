@@ -30,10 +30,11 @@ public class PlaceholderFragment extends Fragment {
     public static Fragment newInstance(int index) {
         Fragment fragment = null ;
         switch (index){
-            case 1: fragment = new FragmentNetworkInfo();break;
-            case 2: fragment = new FragmentLocationDev();break;
-            case 3: fragment = new FragmentDeviceInformation();break;
-            case 4: fragment = new FragmentMapLocation();break;
+            case 1: fragment = new FragmentMapLocation();break;
+            case 2: fragment = new FragmentNetworkInfo();break;
+            case 3: fragment = new FragmentLocationDev();break;
+            case 4: fragment = new FragmentDeviceInformation();break;
+
         }
         return fragment;
     }

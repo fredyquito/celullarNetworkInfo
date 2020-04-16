@@ -15,6 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -25,7 +34,7 @@ import java.util.ArrayList;
  * Use the {@link FragmentNetworkInfo#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentNetworkInfo extends Fragment {
+public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,6 +47,10 @@ public class FragmentNetworkInfo extends Fragment {
     private ScanDbHelper scanDbHelper;
     private ScanMetadata scanMetadata;
     private Cursor cursorQuery;
+    private LocationAddress locationAddress;
+    View root;
+    GoogleMap mGoogleMap;
+    MapView mMapView;
 
 
     public FragmentNetworkInfo() {
@@ -82,10 +95,12 @@ public class FragmentNetworkInfo extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
 
-        View root = inflater.inflate(R.layout.fragment_network_info,container,false);
+        root = inflater.inflate(R.layout.fragment_network_info,container,false);
         TextView textViewLocationInfo_ro = root.findViewById(R.id.textViewNetworkInfo_ro);
         TextView textViewLocationInfo_rw = root.findViewById(R.id.textViewNetworkInfo_rw);
         fragmentNetworkContext = container.getContext();
+        locationAddress = new LocationAddress();
+        Pair<Double,Double> latLonLocation = locationAddress.getLatLongFromLocation(getContext());
 
         ScanCellularActivity scanCellularActivity = new ScanCellularActivity(fragmentNetworkContext);
         String countryISO = scanCellularActivity.getDevCountryIso();
@@ -106,6 +121,13 @@ public class FragmentNetworkInfo extends Fragment {
         String signalQuality = scanCellularActivity.getSignalQuality(phoneSignalStrength);
         ScanInternetSpeed scanInternetSpeed = new ScanInternetSpeed(fragmentNetworkContext);
 
+
+        double latitude;
+        double longitude;
+        latitude = latLonLocation.first;
+        longitude = latLonLocation.second;
+        Log.d("FragmenNetworking","valores de latitud y longitud "+latitude+" long "+longitude);
+
         int downloadMovileSpeed = 0;
         int uploadMovileSpeed = 0;
         int wifiSpeed=0;
@@ -123,8 +145,6 @@ public class FragmentNetworkInfo extends Fragment {
         }
 
         int isRegistered = 0;
-
-
         textViewLocationInfo_ro.setText(
                         "country ISO \n" +
                         "Device IMEI \n" +
@@ -144,8 +164,10 @@ public class FragmentNetworkInfo extends Fragment {
                         "Calidad de la señal \n" +
                         "Tipo de conexión (Internet) \n" +
                         "Mobile Upload Kbps \n" +
-                        "Mobile Doenload Kbps \n" +
-                        "Wifi Speed Mbps ");
+                        "Mobile Download Kbps \n" +
+                        "Wifi Speed Mbps \n" +
+                        "Latitud \n" +
+                        "Longitud ");
         textViewLocationInfo_rw.setText(
                         ""+countryISO+"\n" +
                         ""+deviceIMEI+"\n" +
@@ -166,35 +188,59 @@ public class FragmentNetworkInfo extends Fragment {
                         ""+networkConectivityType+"\n" +
                         ""+uploadMovileSpeed+"\n" +
                         ""+downloadMovileSpeed+"\n" +
-                        ""+wifiSpeed);
+                        ""+wifiSpeed+"\n" +
+                        ""+latitude+"\n" +
+                        ""+longitude);
+        return root;
+    }
 
-        scanMetadata = new ScanMetadata(countryISO,operatorId,operatorName,isConected,phoneSignalType,phoneNetworType,
-                signalQuality,networkConectivityType,phoneSignalStrength,downloadMovileSpeed,uploadMovileSpeed,wifiSpeed, isRegistered);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        mMapView = (MapView) root.findViewById(R.id.mapView2);
+        if (mMapView != null){
+            mMapView.onCreate(null);
+            mMapView.onResume();
+            mMapView.getMapAsync(this);
+        }
+
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapsInitializer.initialize(getContext());
+        mGoogleMap = googleMap;
+        locationAddress = new LocationAddress();
+        Pair<Double,Double> latLonLocation = locationAddress.getLatLongFromLocation(getContext());
+        double latitudeOnMap;
+        double longitudeOnMap;
+        latitudeOnMap = latLonLocation.first;
+        longitudeOnMap = latLonLocation.second;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        scanMetadata = new ScanMetadata("","","","","","",
+                "","",0,0,0,0,0.0,0.0,0);
 
         scanDbHelper = new ScanDbHelper(getContext());
-        scanDbHelper.saveSqlScan(scanMetadata);
+
+
 
         cursorQuery = scanDbHelper.getAllScanInfo();
-        scanDbHelper.printScanQuery(cursorQuery);
-
-        if(networkConectivityType == "WIFI"){
-
-            cursorQuery = scanDbHelper.getScanInfoByIsRegistered(0);
-            ArrayList<String> jsonInputString  =  scanDbHelper.getScanInfoInJson(cursorQuery);
-            for(int i = 0 ; i < jsonInputString.size(); i++){
-                Log.d("URL_JSON","Entra a HttpJsonPost en fragmentNetwork valor de i es "+i);
-                HttpJsonPost jsonPost = new HttpJsonPost();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    Log.d("URL_JSON","Crea y envia jsonInputString "+jsonInputString.get(i));
-                    String response = jsonPost.postJsonToServer("http://192.168.1.50:5005/add", jsonInputString.get(i));
-                    Log.d("Finall URL Post","mensaje es "+response);
-                }
-            }
-
-
-        }else if(networkConectivityType == "MOBILE"){
-
+        ArrayList<String> queryMapFormat = scanDbHelper.getMapQuery(cursorQuery);
+        for(int i = 0 ; i < queryMapFormat.size(); i++){
+            String[] parts = queryMapFormat.get(i).split(":");
+            Log.d("onMapReady","Entra a queryMapFormat en onMapReady valor de i es "+i);
+            String operatorName = parts[0];
+            String phoneNetworType = parts[1];
+            int phoneSignalStrength = Integer.parseInt(parts[2]);
+            double latitude = Double.parseDouble(parts[3]);
+            double longitudeMDouble = Double.parseDouble(parts[4]);
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName).snippet(" "+phoneNetworType+" - "+phoneSignalStrength));
         }
-        return root;
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitudeOnMap,longitudeOnMap)).title("Mi caletos").snippet("Espero salir de aqui algún dia :X"));
+
+        CameraPosition miLocation = CameraPosition.builder().target(new LatLng(latitudeOnMap,longitudeOnMap)).zoom(12).bearing(0).tilt(45).build();
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(miLocation));
     }
 }

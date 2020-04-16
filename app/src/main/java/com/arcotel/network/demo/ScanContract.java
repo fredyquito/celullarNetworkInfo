@@ -19,6 +19,9 @@ public class ScanContract {
         public static final String DOWNLOADMOVILESPEED = "downloadMovileSpeed";
         public static final String UPLOADMOVILSPEED = "uploadMovileSpeed";
         public static final String WIFISPEED = "wifiSpeed";
+        public static final String LATITUDE = "latitude";
+        public static final String LONGITUDE = "longitude";
         public static final String ISREGISTERED = "isRegistered";
+
     }
 }
