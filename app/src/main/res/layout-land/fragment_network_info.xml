@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_network_info"
+    android:background="@color/colorAccent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:isScrollContainer="true"
@@ -10,47 +11,184 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="PING"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                android:textStyle="normal|bold"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/pingTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 ms"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/chartPing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="DOWNLOAD"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                android:textStyle="normal|bold"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/downloadTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 Mbps"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/chartDownload"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="UPLOAD"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                android:textStyle="normal|bold"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/uploadTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 Mbps"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/chartUpload"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/textViewNetworkInfo_ro"
         android:layout_width="160dp"
-        android:layout_height="287dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_horizontal|fill_horizontal"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="180dp"
         android:layout_marginBottom="92dp"
         android:gravity="right"
+        android:textColor="@android:color/background_light"
         android:textIsSelectable="true"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.278" />
 
     <TextView
         android:id="@+id/textViewNetworkInfo_rw"
         android:layout_width="160dp"
-        android:layout_height="287dp"
+        android:layout_height="200dp"
         android:layout_gravity="right"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="92dp"
+        android:layout_marginStart="12dp"
+        android:textColor="@android:color/background_light"
         android:justificationMode="inter_word"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewNetworkInfo_ro"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewNetworkInfo_ro"
+        app:layout_constraintStart_toEndOf="@+id/textViewNetworkInfo_ro" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView2"
-        android:layout_width="369dp"
-        android:layout_height="287dp"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="160dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.986"
+        app:layout_constraintHorizontal_bias="0.958"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.435" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/startButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="730dp"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="3dp"
+        android:background="@color/textColor2"
+        android:elevation="0dp"
+        android:shadowRadius="15"
+        android:text="Comenzar Test"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

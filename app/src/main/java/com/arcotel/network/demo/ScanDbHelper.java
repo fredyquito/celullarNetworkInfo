@@ -79,13 +79,15 @@ public class ScanDbHelper extends SQLiteOpenHelper {
             String operatorName = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.OPERATORNAME));
             String phoneNetworType = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.PHONENETWORKTYPE));
             String phoneSignalStrength = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.PHONESIGNALSTRENGTH));
+            String signalQuality = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.SIGNALQUALITY));
             String latitude = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.LATITUDE));
             String longitude = queryCursor.getString(queryCursor.getColumnIndex(ScanContract.ScanEntry.LONGITUDE));
             queryMapFormat.add(operatorName+":"
                     +phoneNetworType+":"
                     +phoneSignalStrength+":"
                     +latitude+":"
-                    +longitude);
+                    +longitude+":"
+                    +signalQuality);
 
             Log.d("getMapQuery","queryMapFormat es "+queryMapFormat.get(contador));
             contador = contador+1;

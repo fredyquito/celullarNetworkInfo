@@ -27,6 +27,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
+
+
+
 import java.util.ArrayList;
 
 
@@ -109,6 +113,7 @@ public class FragmentMapLocation extends Fragment {
         final String phoneSignalType = scanCellularActivity.getPhoneSignalType();
         final String phoneNetworType = scanCellularActivity.getPhoneNetworType();
         final int phoneSignalStrength = scanCellularActivity.getDevStrengthSignal();
+        //final int phoneSignalStrength = -85;
         final String signalQuality = scanCellularActivity.getSignalQuality(phoneSignalStrength);
         final ScanInternetSpeed scanInternetSpeed = new ScanInternetSpeed(fragmentMapLocationContext);
 
@@ -118,8 +123,8 @@ public class FragmentMapLocation extends Fragment {
         latitude = latLonLocation.first;
         longitude = latLonLocation.second;
 
-        //latitude = -0.341969;
-        //longitude = -78.530128;
+        //latitude = -0.329035;
+        //longitude = -78.533157;
 
         int downloadMovileSpeed = 0;
         int uploadMovileSpeed = 0;

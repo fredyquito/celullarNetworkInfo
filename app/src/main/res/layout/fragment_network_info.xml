@@ -2,22 +2,142 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorAccent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FragmentNetworkInfo">
 
     <!-- TODO: Update blank fragment layout -->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="PING"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                android:textStyle="normal|bold"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/pingTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 ms"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/chartPing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="DOWNLOAD"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                android:textStyle="normal|bold"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/downloadTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 Mbps"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/chartDownload"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="UPLOAD"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                android:textStyle="normal|bold"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/uploadTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 Mbps"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/chartUpload"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/textViewNetworkInfo_ro"
         android:layout_width="190dp"
-        android:layout_height="287dp"
+        android:layout_height="185dp"
         android:layout_gravity="center_horizontal|fill_horizontal"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="172dp"
         android:gravity="right"
+        android:textColor="@android:color/background_light"
         android:textIsSelectable="true"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,25 +146,46 @@
     <TextView
         android:id="@+id/textViewNetworkInfo_rw"
         android:layout_width="190dp"
-        android:layout_height="287dp"
+        android:layout_height="185dp"
         android:layout_gravity="right"
         android:layout_marginStart="15dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:justificationMode="inter_word"
+        android:textColor="@android:color/background_light"
         android:textIsSelectable="true"
         android:textSize="14sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewNetworkInfo_ro"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textViewNetworkInfo_ro" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView2"
-        android:layout_width="389dp"
-        android:layout_height="356dp"
+        android:layout_width="399dp"
+        android:layout_height="294dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.902" />
+        app:layout_constraintVertical_bias="0.846" />
+
+    <Button
+        android:id="@+id/startButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="406dp"
+        android:layout_height="56dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="3dp"
+        android:background="@color/textColor2"
+        android:elevation="0dp"
+        android:shadowRadius="15"
+        android:text="Comenzar Test"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
