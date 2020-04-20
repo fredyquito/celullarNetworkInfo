@@ -155,22 +155,23 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
         Pair<Double,Double> latLonLocation = locationAddress.getLatLongFromLocation(getContext());
 
         ScanCellularActivity scanCellularActivity = new ScanCellularActivity(fragmentNetworkContext);
-        String countryISO = scanCellularActivity.getDevCountryIso();
-        String deviceIMEI = scanCellularActivity.getDeviceIMEI();
-        String operatorId = scanCellularActivity.getDevOperatorID();
+        //String countryISO = scanCellularActivity.getDevCountryIso();
+        //String deviceIMEI = scanCellularActivity.getDeviceIMEI();
+        //String operatorId = scanCellularActivity.getDevOperatorID();
         String operatorName = scanCellularActivity.getDevOperatorName();
         String isConected = scanCellularActivity.getDevIsConected();
-        String phoneSignalType = scanCellularActivity.getPhoneSignalType();
+        //String phoneSignalType = scanCellularActivity.getPhoneSignalType();
         String phoneNetworType = scanCellularActivity.getPhoneNetworType();
-        int phoneSignalStrength = scanCellularActivity.getDevStrengthSignal();
-        int phoneStrengthAsu = 20;
+        //int phoneSignalStrength = scanCellularActivity.getDevStrengthSignal()[0];
+        //int phoneStrengthAsu = scanCellularActivity.getDevStrengthSignal()[1];
+        //int phoneStrengthLevel = scanCellularActivity.getDevStrengthSignal()[2];
         int phoneBand = 5;
         int phoneLAC = 33101;
         int phoneUCID = 620144;
         int phoneCID = 30320;
         int phoneRNC = 9;
         int phonePSC = 420;
-        String signalQuality = scanCellularActivity.getSignalQuality(phoneSignalStrength);
+        String signalQuality = "";
         ScanInternetSpeed scanInternetSpeed = new ScanInternetSpeed(fragmentNetworkContext);
 
 
@@ -180,54 +181,162 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
         longitude = latLonLocation.second;
         Log.d("FragmenNetworking","valores de latitud y longitud "+latitude+" long "+longitude);
 
-        int downloadMovileSpeed = 0;
-        int uploadMovileSpeed = 0;
-        int wifiSpeed=0;
         String networkConectivityType = scanInternetSpeed.getNetworkConectivityType();
 
-        if(networkConectivityType == "WIFI"){
-            wifiSpeed = scanInternetSpeed.checkWifiInternetSpeed();
-        }else if(networkConectivityType == "MOBILE"){
-            Pair<Integer, Integer> speedBandwithMovile = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                speedBandwithMovile = scanInternetSpeed.checkMovileInternetSpeed();
-            }
-            downloadMovileSpeed = speedBandwithMovile.first.intValue();
-            uploadMovileSpeed = speedBandwithMovile.second.intValue();
+        Log.d("ANALI>AR ESTO "," el valor de phoneNetworType es "+phoneNetworType);
+
+        //Seccion HSPA
+        if(phoneNetworType == "HSPA+" || phoneNetworType == "HSPA" || phoneNetworType == "UMTS"){
+            ArrayList<Integer> strengthInfo = scanCellularActivity.getDevStrengthSignal();
+            ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
+            signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
+            textViewLocationInfo_ro.setText(
+                    "Nombre de operador \n" +
+                            "Estado Conexión móvil \n" +
+                            "Tipo de red móvil \n" +
+                            "Potencia de la señal dBm \n" +
+                            "LAC \n" +
+                            "UCID \n" +
+                            "CID \n" +
+                            "RNC \n" +
+                            "PSC \n" +
+                            "ARFCN \n" +
+                            "Calidad de la señal \n" +
+                            "Tipo de conexión (Internet) \n" +
+                            "Latitud \n" +
+                            "Longitud ");
+            textViewLocationInfo_rw.setText(
+
+                    ""+operatorName+"\n" +
+                            ""+isConected+"\n" +
+                            ""+phoneNetworType+"\n" +
+                            ""+strengthInfo.get(0)+"\n" +
+                            ""+cellIdentity.get(0)+"\n" +
+                            ""+cellIdentity.get(1)+"\n" +
+                            ""+cellIdentity.get(3)+"\n" +
+                            ""+cellIdentity.get(4)+"\n" +
+                            ""+cellIdentity.get(2)+"\n" +
+                            ""+cellIdentity.get(5)+"\n" +
+                            ""+signalQuality+"\n"+
+                            ""+networkConectivityType+"\n" +
+                            ""+latitude+"\n" +
+                            ""+longitude);
+
         }
 
-        int isRegistered = 0;
-        textViewLocationInfo_ro.setText(
-                "Nombre de operador \n" +
-                        "Estado Conexión móvil \n" +
-                        "Tipo de red móvil \n" +
-                        "Potencia de la señal \n" +
-                        "LAC \n" +
-                        "UCID \n" +
-                        "CID \n" +
-                        "RNC \n" +
-                        "PSC \n" +
-                        "Calidad de la señal \n" +
-                        "Tipo de conexión (Internet) \n" +
-                        "Latitud \n" +
-                        "Longitud ");
-        textViewLocationInfo_rw.setText(
+        //Seccion Lte
+        if(phoneNetworType == "LTE"){
+            ArrayList<Integer> strengthInfo = scanCellularActivity.getDevStrengthSignal();
+            ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
+            signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
+            textViewLocationInfo_ro.setText(
+                    "Nombre de operador \n" +
+                            "Estado Conexión móvil \n" +
+                            "Tipo de red móvil \n" +
+                            "Potencia de la señal dBm \n" +
+                            "RSRP dBm \n" +
+                            "RSRQ dBm \n" +
+                            "Rssnr dBm \n" +
+                            "eNodeB \n" +
+                            "TAC \n" +
+                            "CID \n" +
+                            "PCI \n" +
+                            "ARFCN \n" +
+                            "Calidad de la señal \n" +
+                            "Tipo de conexión (Internet) \n" +
+                            "Latitud \n" +
+                            "Longitud ");
+            textViewLocationInfo_rw.setText(
 
-                ""+operatorName+"\n" +
-                        ""+isConected+"\n" +
-                        ""+phoneNetworType+"\n" +
-                        ""+phoneSignalStrength+"\n" +
-                        ""+phoneLAC+"\n" +
-                        ""+phoneUCID+"\n" +
-                        ""+phoneCID+"\n" +
-                        ""+phoneRNC+"\n" +
-                        ""+phonePSC+"\n" +
-                        ""+signalQuality+"\n"+
-                        ""+networkConectivityType+"\n" +
-                         ""+latitude+"\n" +
-                        ""+longitude);
+                    ""+operatorName+"\n" +
+                            ""+isConected+"\n" +
+                            ""+phoneNetworType+"\n" +
+                            ""+strengthInfo.get(0)+"\n" +
+                            ""+strengthInfo.get(3)+"\n" +
+                            ""+strengthInfo.get(4)+"\n" +
+                            ""+cellIdentity.get(2)+"\n" +
+                            ""+cellIdentity.get(1)+"\n" +
+                            ""+cellIdentity.get(3)+"\n" +
+                            ""+cellIdentity.get(0)+"\n" +
+                            ""+cellIdentity.get(4)+"\n" +
+                            ""+signalQuality+"\n"+
+                            ""+networkConectivityType+"\n" +
+                            ""+latitude+"\n" +
+                            ""+longitude);
+        }
+
+        //Seccion GSM
+        if(phoneNetworType == "GSM" || phoneNetworType == "GPRS" || phoneNetworType == "EDGE"){
+            ArrayList<Integer> strengthInfo = scanCellularActivity.getDevStrengthSignal();
+            ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
+            signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
+            textViewLocationInfo_ro.setText(
+                    "Nombre de operador \n" +
+                            "Estado Conexión móvil \n" +
+                            "Tipo de red móvil \n" +
+                            "Potencia de la señal dBm \n" +
+                            "LAC \n" +
+                            "CID \n" +
+                            "ARFCN \n" +
+                            "Calidad de la señal \n" +
+                            "Tipo de conexión (Internet) \n" +
+                            "Latitud \n" +
+                            "Longitud ");
+            textViewLocationInfo_rw.setText(
+
+                    ""+operatorName+"\n" +
+                            ""+isConected+"\n" +
+                            ""+phoneNetworType+"\n" +
+                            ""+strengthInfo.get(0)+"\n" +
+                            ""+cellIdentity.get(0)+"\n" +
+                            ""+cellIdentity.get(1)+"\n" +
+                            ""+cellIdentity.get(2)+"\n" +
+                            ""+signalQuality+"\n"+
+                            ""+networkConectivityType+"\n" +
+                            ""+latitude+"\n" +
+                            ""+longitude);
+        }
+
+        //Seccion CDMA
+        if(phoneNetworType == "CDMA" || phoneNetworType == "EVDO_0" || phoneNetworType == "EVDO_A" || phoneNetworType == "EVDO_B"){
+            ArrayList<Integer> strengthInfo = scanCellularActivity.getDevStrengthSignal();
+            ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
+            signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
+            textViewLocationInfo_ro.setText(
+                    "Nombre de operador \n" +
+                            "Estado Conexión móvil \n" +
+                            "Tipo de red móvil \n" +
+                            "Potencia de la señal dBm \n" +
+                            "BSLat \n" +
+                            "BSLon \n" +
+                            "SID \n" +
+                            "NID \n" +
+                            "BID \n" +
+                            "Calidad de la señal \n" +
+                            "Tipo de conexión (Internet) \n" +
+                            "Latitud \n" +
+                            "Longitud ");
+            textViewLocationInfo_rw.setText(
+
+                    ""+operatorName+"\n" +
+                            ""+isConected+"\n" +
+                            ""+phoneNetworType+"\n" +
+                            ""+strengthInfo.get(0)+"\n" +
+                            ""+cellIdentity.get(0)+"\n" +
+                            ""+cellIdentity.get(1)+"\n" +
+                            ""+cellIdentity.get(2)+"\n" +
+                            ""+cellIdentity.get(3)+"\n" +
+                            ""+cellIdentity.get(4)+"\n" +
+                            ""+signalQuality+"\n"+
+                            ""+networkConectivityType+"\n" +
+                            ""+latitude+"\n" +
+                            ""+longitude);
+
+        }
 
 
+
+//desde aqui comienza el test de internet
         final Button startButton = (Button) root.findViewById(R.id.startButton);
         final DecimalFormat dec = new DecimalFormat("#.##");
         startButton.setText("Comenzar Test");

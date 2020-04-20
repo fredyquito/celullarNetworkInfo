@@ -112,7 +112,7 @@ public class FragmentMapLocation extends Fragment {
         final String isConected = scanCellularActivity.getDevIsConected();
         final String phoneSignalType = scanCellularActivity.getPhoneSignalType();
         final String phoneNetworType = scanCellularActivity.getPhoneNetworType();
-        final int phoneSignalStrength = scanCellularActivity.getDevStrengthSignal();
+        final int phoneSignalStrength = -75;
         //final int phoneSignalStrength = -85;
         final String signalQuality = scanCellularActivity.getSignalQuality(phoneSignalStrength);
         final ScanInternetSpeed scanInternetSpeed = new ScanInternetSpeed(fragmentMapLocationContext);
