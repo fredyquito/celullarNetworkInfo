@@ -32,6 +32,7 @@ public class FragmentDeviceInformation extends Fragment {
 
     public FragmentDeviceInformation() {
         // Required empty public constructor
+
     }
 
     /**

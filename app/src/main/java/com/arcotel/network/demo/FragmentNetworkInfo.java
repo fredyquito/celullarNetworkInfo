@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
+import android.telephony.SignalStrength;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 
 
@@ -191,16 +193,16 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
             ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
             signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
             textViewLocationInfo_ro.setText(
-                    "Nombre de operador \n" +
+                            //Seccion HSPA - HSPA+ - UMTS - WCDMA
+                            "Nombre de operador \n" +
                             "Estado Conexión móvil \n" +
                             "Tipo de red móvil \n" +
-                            "Potencia de la señal dBm \n" +
+                            "Potencia de la señal (dBm) \n" +
                             "LAC \n" +
-                            "UCID \n" +
-                            "CID \n" +
-                            "RNC \n" +
-                            "PSC \n" +
-                            "ARFCN \n" +
+                            "UCID \n" + //UCID: UMTS Cell Identifier (28-bit)
+                            "CID \n" + //CID: Cell Identifier (16-bit)
+                            "RNC \n" + //RNC: Controlling RNC/BSS Identifier (12-bit)
+                            "PSC \n" + //PSC: Primary Srambling Code of Cell
                             "Calidad de la señal \n" +
                             "Tipo de conexión (Internet) \n" +
                             "Latitud \n" +
@@ -216,7 +218,6 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                             ""+cellIdentity.get(3)+"\n" +
                             ""+cellIdentity.get(4)+"\n" +
                             ""+cellIdentity.get(2)+"\n" +
-                            ""+cellIdentity.get(5)+"\n" +
                             ""+signalQuality+"\n"+
                             ""+networkConectivityType+"\n" +
                             ""+latitude+"\n" +
@@ -226,22 +227,33 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
 
         //Seccion Lte
         if(phoneNetworType == "LTE"){
+            double snr=0.0;
             ArrayList<Integer> strengthInfo = scanCellularActivity.getDevStrengthSignal();
             ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
             signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
+
+            try {
+                snr = (double) SignalStrength.class.getMethod("getLteRssnr").invoke(strengthInfo.get(3))/10D;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
             textViewLocationInfo_ro.setText(
-                    "Nombre de operador \n" +
+                    //Sección LTE
+                            "Nombre de operador \n" +
                             "Estado Conexión móvil \n" +
                             "Tipo de red móvil \n" +
-                            "Potencia de la señal dBm \n" +
-                            "RSRP dBm \n" +
-                            "RSRQ dBm \n" +
-                            "Rssnr dBm \n" +
-                            "eNodeB \n" +
-                            "TAC \n" +
-                            "CID \n" +
-                            "PCI \n" +
-                            "ARFCN \n" +
+                            "RSRP (dBm) \n" + //RSRP: Reference Signal Received Power
+                            "RSRQ (dBm) \n" + //RSRQ: Reference Signal Received Quality
+                            "Rssnr (dBm) \n" + //RSSNR: Reference Signal Signal to Noise Ratio
+                            "eNodeB \n" + // eNB: eNodeB Identifier (20-bit)
+                            "TAC \n" + //TAC: Tracking Area Code (16-bit)
+                            "CID \n" + //LCID: Local Cell Identifier (8-bit)
+                            "PCI \n" + //PCI: Physical Cell ID (0-503)
+                            "ARFCN \n" + //EARFCN: E-UTRA Absolute Radio Frequency Channel Number (0-65535)
                             "Calidad de la señal \n" +
                             "Tipo de conexión (Internet) \n" +
                             "Latitud \n" +
@@ -251,9 +263,9 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                     ""+operatorName+"\n" +
                             ""+isConected+"\n" +
                             ""+phoneNetworType+"\n" +
-                            ""+strengthInfo.get(0)+"\n" +
                             ""+strengthInfo.get(3)+"\n" +
                             ""+strengthInfo.get(4)+"\n" +
+                            ""+snr+"\n" +
                             ""+cellIdentity.get(2)+"\n" +
                             ""+cellIdentity.get(1)+"\n" +
                             ""+cellIdentity.get(3)+"\n" +
@@ -271,13 +283,14 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
             ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
             signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
             textViewLocationInfo_ro.setText(
-                    "Nombre de operador \n" +
+                    //Seccion GSM - GPRS - EDGE
+                            "Nombre de operador \n" +
                             "Estado Conexión móvil \n" +
                             "Tipo de red móvil \n" +
-                            "Potencia de la señal dBm \n" +
-                            "LAC \n" +
-                            "CID \n" +
-                            "ARFCN \n" +
+                            "Potencia de la señal (dBm) \n" +
+                            "LAC \n" + //LAC: GSM Location Area (16-bit)
+                            "CID \n" + //CID: GSM Cell Identifier (16-bit, for Base transceiver station (BTS) or sector of a BTS)
+                            "ARFCN \n" + //ARFCN: Absolute Radio Frequency Channel Number (0-1023)
                             "Calidad de la señal \n" +
                             "Tipo de conexión (Internet) \n" +
                             "Latitud \n" +
@@ -303,15 +316,16 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
             ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
             signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
             textViewLocationInfo_ro.setText(
-                    "Nombre de operador \n" +
+                    //Seccion CDMA - EVDO
+                            "Nombre de operador \n" +
                             "Estado Conexión móvil \n" +
                             "Tipo de red móvil \n" +
-                            "Potencia de la señal dBm \n" +
-                            "BSLat \n" +
-                            "BSLon \n" +
-                            "SID \n" +
-                            "NID \n" +
-                            "BID \n" +
+                            "Potencia de la señal (dBm) \n" +
+                            "BSLat \n" + //BSLat: Base station latitude
+                            "BSLon \n" + //BSLon: Base station longitude
+                            "SID \n" + //SID: System Identifier (15-bit)
+                            "NID \n" + //NID: Network Identifier (16-bit)
+                            "BID \n" + //BID: Base Station Identifier (16-bit)
                             "Calidad de la señal \n" +
                             "Tipo de conexión (Internet) \n" +
                             "Latitud \n" +

@@ -2,12 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorAccent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     tools:context=".FragmentNetworkInfo">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="87dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="316dp"
+        android:layout_marginTop="332dp"
+        android:src="@drawable/arcotel_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,22 +37,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
                 android:text="PING"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="12sp"
-                android:textStyle="normal|bold"
-                android:gravity="center_horizontal" />
+                android:textStyle="normal|bold" />
 
             <TextView
                 android:id="@+id/pingTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="0 ms"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
-                android:textSize="20sp"
-                android:gravity="center_horizontal" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:id="@+id/chartPing"
@@ -51,6 +61,7 @@
                 android:orientation="vertical">
 
             </LinearLayout>
+
 
         </LinearLayout>
 
@@ -65,22 +76,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
                 android:text="DOWNLOAD"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="12sp"
-                android:textStyle="normal|bold"
-                android:gravity="center_horizontal" />
+                android:textStyle="normal|bold" />
 
             <TextView
                 android:id="@+id/downloadTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="0 Mbps"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
-                android:textSize="20sp"
-                android:gravity="center_horizontal" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:id="@+id/chartDownload"
@@ -100,22 +111,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
                 android:text="UPLOAD"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="12sp"
-                android:textStyle="normal|bold"
-                android:gravity="center_horizontal" />
+                android:textStyle="normal|bold" />
 
             <TextView
                 android:id="@+id/uploadTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="0 Mbps"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
-                android:textSize="20sp"
-                android:gravity="center_horizontal" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:id="@+id/chartUpload"
@@ -187,5 +198,6 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mapView2" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
