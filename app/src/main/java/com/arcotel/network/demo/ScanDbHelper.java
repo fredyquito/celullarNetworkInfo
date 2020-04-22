@@ -89,7 +89,7 @@ public class ScanDbHelper extends SQLiteOpenHelper {
                     +longitude+":"
                     +signalQuality);
 
-            Log.d("getMapQuery","queryMapFormat es "+queryMapFormat.get(contador));
+            Log.d("getMapQuery","queryMapFormat es "+queryMapFormat.get(contador)+" contador es "+contador);
             contador = contador+1;
         }
         return queryMapFormat;

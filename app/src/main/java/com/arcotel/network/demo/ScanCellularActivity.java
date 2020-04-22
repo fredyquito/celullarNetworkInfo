@@ -37,6 +37,8 @@ import androidx.constraintlayout.solver.widgets.ConstraintAnchor;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.util.Hex;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -276,7 +278,13 @@ public class ScanCellularActivity {
                             cellItentity.add(identityLte.getPci()); //PCI: Physical Cell ID (0-503)
                             cellItentity.add(identityLte.getTac()); //TAC: Tracking Area Code (16-bit)
                             cellItentity.add(identityLte.getCi() >> 8); //eNB: eNodeB Identifier (20-bit)
-                            cellItentity.add(identityLte.getCi());
+                            //cellItentity.add(identityLte.getCi());
+                            String hexPivote = Integer.toHexString(identityLte.getCi());
+                            String [] cadena = hexPivote.split("");
+                            hexPivote = cadena[cadena.length]+cadena[cadena.length -1];
+                            int lteCid=Integer.parseInt(hexPivote,16);
+                            cellItentity.add(lteCid);       // LCID: Local Cell Identifier (8-bit)
+
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 cellItentity.add(identityLte.getEarfcn()); //EARFCN: E-UTRA Absolute Radio Frequency Channel Number (0-65535)
                             }

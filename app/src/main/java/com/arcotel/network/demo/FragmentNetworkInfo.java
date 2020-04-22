@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
-import android.telephony.SignalStrength;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 
 
@@ -227,20 +225,9 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
 
         //Seccion Lte
         if(phoneNetworType == "LTE"){
-            double snr=0.0;
             ArrayList<Integer> strengthInfo = scanCellularActivity.getDevStrengthSignal();
             ArrayList<Integer> cellIdentity = scanCellularActivity.getDevCellIdentity();
             signalQuality = scanCellularActivity.getSignalQuality(strengthInfo.get(0));
-
-            try {
-                snr = (double) SignalStrength.class.getMethod("getLteRssnr").invoke(strengthInfo.get(3))/10D;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
             textViewLocationInfo_ro.setText(
                     //Sección LTE
                             "Nombre de operador \n" +
@@ -265,7 +252,7 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                             ""+phoneNetworType+"\n" +
                             ""+strengthInfo.get(3)+"\n" +
                             ""+strengthInfo.get(4)+"\n" +
-                            ""+snr+"\n" +
+                            ""+strengthInfo.get(5)+"\n" +
                             ""+cellIdentity.get(2)+"\n" +
                             ""+cellIdentity.get(1)+"\n" +
                             ""+cellIdentity.get(3)+"\n" +
