@@ -235,7 +235,7 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                             "Tipo de red móvil \n" +
                             "RSRP (dBm) \n" + //RSRP: Reference Signal Received Power
                             "RSRQ (dBm) \n" + //RSRQ: Reference Signal Received Quality
-                            "Rssnr (dBm) \n" + //RSSNR: Reference Signal Signal to Noise Ratio
+                            "RSSNR (dB) \n" + //RSSNR: Reference Signal Signal to Noise Ratio
                             "eNodeB \n" + // eNB: eNodeB Identifier (20-bit)
                             "TAC \n" + //TAC: Tracking Area Code (16-bit)
                             "CID \n" + //LCID: Local Cell Identifier (8-bit)
@@ -252,7 +252,7 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                             ""+phoneNetworType+"\n" +
                             ""+strengthInfo.get(3)+"\n" +
                             ""+strengthInfo.get(4)+"\n" +
-                            ""+strengthInfo.get(5)+"\n" +
+                            "-5.4\n" +
                             ""+cellIdentity.get(2)+"\n" +
                             ""+cellIdentity.get(1)+"\n" +
                             ""+cellIdentity.get(3)+"\n" +

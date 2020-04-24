@@ -3,7 +3,7 @@ from app import app
 from db_config import mysql
 from flask import jsonify
 from flask import flash, request
-		
+
 @app.route('/add', methods=['POST'])
 def add_user():
     try:
@@ -20,13 +20,15 @@ def add_user():
         _downloadmovilespeed = _json['downloadmovilespeed']
         _uploadmovilspeed = _json['uploadmovilspeed']
         _wifispeed = _json['wifispeed']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
         # validate the received values
-        if _countryiso and _operatorid and _operatorname and _isconected and _phonesignaltype and _phonenetworktype and _signalquality and _networkconectivitytype and _phonesignalstrength and _downloadmovilespeed and _uploadmovilspeed and _wifispeed and request.method == 'POST':
+        if _countryiso and _operatorid and _operatorname and _isconected and _phonesignaltype and _phonenetworktype and _signalquality and _networkconectivitytype and _phonesignalstrength and _downloadmovilespeed and _uploadmovilspeed and _wifispeed and _latitude and _longitude and request.method == 'POST':
             #do not save password as a plain text
             #_hashed_password = generate_password_hash(_password)
             # save edits
-            sql = "INSERT INTO cellularscantb(countryiso, operatorid, operatorname, isconected, phonesignaltype, phonenetworktype, signalquality, networkconectivitytype, phonesignalstrength, downloadmovilespeed, uploadmovilspeed, wifispeed ) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            data = (_countryiso, _operatorid, _operatorname, _isconected, _phonesignaltype, _phonenetworktype, _signalquality, _networkconectivitytype, _phonesignalstrength, _downloadmovilespeed, _uploadmovilspeed, _wifispeed,)
+            sql = "INSERT INTO cellularscantb(countryiso, operatorid, operatorname, isconected, phonesignaltype, phonenetworktype, signalquality, networkconectivitytype, phonesignalstrength, downloadmovilespeed, uploadmovilspeed, wifispeed, latitude, longitude ) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            data = (_countryiso, _operatorid, _operatorname, _isconected, _phonesignaltype, _phonenetworktype, _signalquality, _networkconectivitytype, _phonesignalstrength, _downloadmovilespeed, _uploadmovilspeed, _wifispeed, _latitude, _longitude,)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.execute(sql, data)
@@ -37,11 +39,11 @@ def add_user():
         else:
             return not_found()
     except Exception as e:
-    	print(e)
+        print(e)
     finally:
-        cursor.close() 
+        cursor.close()
         conn.close()
-		
+
 @app.route('/getdata')
 def users():
     try:
@@ -55,9 +57,9 @@ def users():
     except Exception as e:
         print(e)
     finally:
-        cursor.close() 
+        cursor.close()
         conn.close()
-		
+
 @app.route('/getdata/<int:id>')
 def user(id):
     try:
@@ -71,7 +73,7 @@ def user(id):
     except Exception as e:
         print(e)
     finally:
-        cursor.close() 
+        cursor.close()
         conn.close()
 
 @app.route('/update', methods=['POST'])
@@ -89,14 +91,16 @@ def update_user():
         _phonesignalstrength = _json['phonesignalstrength']
         _downloadmovilespeed = _json['downloadmovilespeed']
         _uploadmovilspeed = _json['uploadmovilspeed']
-        _wifispeed = _json['wifispeed']		
+        _wifispeed = _json['wifispeed']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
         # validate the received values
-        if _countryiso and _operatorid and _operatorname and _isconected and _phonesignaltype and _phonenetworktype and _signalquality and _networkconectivitytype and _phonesignalstrength and _downloadmovilespeed and _uploadmovilspeed and _wifispeed and request.method == 'POST':
+        if _countryiso and _operatorid and _operatorname and _isconected and _phonesignaltype and _phonenetworktype and _signalquality and _networkconectivitytype and _phonesignalstrength and _downloadmovilespeed and _uploadmovilspeed and _wifispeed and _latitude and _longitude and request.method == 'POST':
             #do not save password as a plain text
             #_hashed_password = generate_password_hash(_password)
             # save edits
-            sql = "UPDATE cellularscantb SET _countryiso=%s,  _operatorid=%s,  _operatorname=%s,  _isconected=%s,  _phonesignaltype=%s,  _phonenetworktype=%s,  _signalquality=%s,  _networkconectivitytype=%s,  _phonesignalstrength=%s,  _downloadmovilespeed=%s,  _uploadmovilspeed=%s,  _wifispeed=%s WHERE user_id=%s"
-            data = (_countryiso, _operatorid, _operatorname, _isconected, _phonesignaltype, _phonenetworktype, _signalquality, _networkconectivitytype, _phonesignalstrength, _downloadmovilespeed, _uploadmovilspeed, _wifispeed, _id)
+            sql = "UPDATE cellularscantb SET _countryiso=%s,  _operatorid=%s,  _operatorname=%s,  _isconected=%s,  _phonesignaltype=%s,  _phonenetworktype=%s,  _signalquality=%s,  _networkconectivitytype=%s,  _phonesignalstrength=%s,  _downloadmovilespeed=%s,  _uploadmovilspeed=%s,  _wifispeed=%s,  _latitude=%s,  _longitude=%s WHERE user_id=%s"
+            data = (_countryiso, _operatorid, _operatorname, _isconected, _phonesignaltype, _phonenetworktype, _signalquality, _networkconectivitytype, _phonesignalstrength, _downloadmovilespeed, _uploadmovilspeed, _wifispeed, _latitude, _longitude, _id)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.execute(sql, data)
@@ -109,9 +113,9 @@ def update_user():
     except Exception as e:
         print(e)
     finally:
-        cursor.close() 
+        cursor.close()
         conn.close()
-		
+
 @app.route('/delete/<int:id>')
 def delete_user(id):
     try:
@@ -125,9 +129,9 @@ def delete_user(id):
     except Exception as e:
         print(e)
     finally:
-        cursor.close() 
+        cursor.close()
         conn.close()
-		
+
 @app.errorhandler(404)
 def not_found(error=None):
     message = {
@@ -136,8 +140,8 @@ def not_found(error=None):
     }
     resp = jsonify(message)
     resp.status_code = 404
-    
+
     return resp
-		
+
 if __name__ == "__main__":
     app.run(host = '0.0.0.0',port=5005)

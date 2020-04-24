@@ -170,6 +170,9 @@ public class FragmentMapLocation extends Fragment {
             public void onClick(View arg0) {
 
                 if(networkConectivityType == "WIFI"){
+                    Log.d("URL_JSON","Boton buttonUploadInfo presionado ");
+                    Log.d("URL_JSON","Variable network es:  "+networkConectivityType);
+                    scanDbHelper = new ScanDbHelper(getContext());
                     cursorQuery = scanDbHelper.getScanInfoByIsRegistered(0);
                     ArrayList<String> jsonInputString  =  scanDbHelper.getScanInfoInJson(cursorQuery);
                     for(int i = 0 ; i < jsonInputString.size(); i++){
@@ -178,6 +181,11 @@ public class FragmentMapLocation extends Fragment {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                             Log.d("URL_JSON","Crea y envia jsonInputString "+jsonInputString.get(i));
                             String response = jsonPost.postJsonToServer("http://192.168.1.50:5005/add", jsonInputString.get(i));
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             Log.d("Finall URL Post","mensaje es "+response);
                         }
                     }

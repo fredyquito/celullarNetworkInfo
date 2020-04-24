@@ -273,17 +273,18 @@ public class ScanCellularActivity {
                                 cellItentity.add(identityGsm.getArfcn()); //ARFCN: Absolute Radio Frequency Channel Number (0-1023)
                             }
                         } else if (cellInfos.get(i) instanceof CellInfoLte) {
+                            String hexPivote = "";
                             CellInfoLte cellInfoLte = (CellInfoLte) cellInfos.get(i);
                             CellIdentityLte identityLte = cellInfoLte.getCellIdentity();
                             cellItentity.add(identityLte.getPci()); //PCI: Physical Cell ID (0-503)
                             cellItentity.add(identityLte.getTac()); //TAC: Tracking Area Code (16-bit)
                             cellItentity.add(identityLte.getCi() >> 8); //eNB: eNodeB Identifier (20-bit)
                             //cellItentity.add(identityLte.getCi());
-                            String hexPivote = Integer.toHexString(identityLte.getCi());
+                            hexPivote = Integer.toHexString(identityLte.getCi());
                             String [] cadena = hexPivote.split("");
-                            hexPivote = cadena[cadena.length]+cadena[cadena.length -1];
+                            hexPivote = cadena[cadena.length-2]+cadena[cadena.length -1];
                             int lteCid=Integer.parseInt(hexPivote,16);
-                            cellItentity.add(lteCid);       // LCID: Local Cell Identifier (8-bit)
+                            cellItentity.add(lteCid);
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 cellItentity.add(identityLte.getEarfcn()); //EARFCN: E-UTRA Absolute Radio Frequency Channel Number (0-65535)

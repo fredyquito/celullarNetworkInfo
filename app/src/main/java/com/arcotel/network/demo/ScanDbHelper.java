@@ -115,6 +115,7 @@ public class ScanDbHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getScanInfoByIsRegistered(int isRegistered) {
+        Log.d("getScanInfoByIsRegred","Entra al metodo");
         Cursor c = getReadableDatabase().query(
                 ScanContract.ScanEntry.TABLE_NAME,
                 null,
