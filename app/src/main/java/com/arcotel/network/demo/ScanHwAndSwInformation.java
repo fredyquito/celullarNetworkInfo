@@ -32,8 +32,17 @@ public class ScanHwAndSwInformation {
                 +"\nUSER : "+Build.USER;
         Log.d("GetDevInfo", "es "+details);
         return details;
+    }
 
-
+    public String getDevManufacturer(){
+        String manufacturer = "";
+        manufacturer = Build.MANUFACTURER.toString();
+        return  manufacturer;
+    }
+    public String getDevModel(){
+        String model = "";
+        model = Build.MODEL.toString();
+        return model;
     }
 
 

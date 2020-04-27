@@ -137,17 +137,25 @@ public class ScanCellularActivity {
         return varPhoneNetworType;
     }
 
-
-    public String getDeviceIMEI() {
-        String deviceUniqueIdentifier = null;
-        if (null != telephonyManager) {
-            deviceUniqueIdentifier = telephonyManager.getDeviceId();
-        }
-        if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
-            deviceUniqueIdentifier = "No es posible conseguir IMEI";
-        }
-        return deviceUniqueIdentifier;
+    public String getDevSimOperatorName(){
+        String simOperatorId = "";
+        simOperatorId = telephonyManager.getSimOperatorName();
+        return simOperatorId;
     }
+
+    public String getDevMccId() {
+        String operatorMccMnc = "";
+        operatorMccMnc = telephonyManager.getNetworkOperator().substring(0, 3);
+        return operatorMccMnc;
+
+    }
+    public String getDevMncId() {
+        String operatorMccMnc = "";
+        operatorMccMnc = telephonyManager.getNetworkOperator().substring(3);
+        return operatorMccMnc;
+
+    }
+
 
     public String getDevIsConected() {
         String conectado;

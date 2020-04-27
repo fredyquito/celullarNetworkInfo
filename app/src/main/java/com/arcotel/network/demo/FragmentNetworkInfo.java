@@ -79,6 +79,9 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
     private ScanMetadata scanMetadata;
     private Cursor cursorQuery;
     private LocationAddress locationAddress;
+    double pingTime=0.0;
+    double uploadSpeed=0.0;
+    double downloadSpeed=0.0;
     View root;
     GoogleMap mGoogleMap;
     MapView mMapView;
@@ -165,12 +168,6 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
         //int phoneSignalStrength = scanCellularActivity.getDevStrengthSignal()[0];
         //int phoneStrengthAsu = scanCellularActivity.getDevStrengthSignal()[1];
         //int phoneStrengthLevel = scanCellularActivity.getDevStrengthSignal()[2];
-        int phoneBand = 5;
-        int phoneLAC = 33101;
-        int phoneUCID = 620144;
-        int phoneCID = 30320;
-        int phoneRNC = 9;
-        int phonePSC = 420;
         String signalQuality = "";
         ScanInternetSpeed scanInternetSpeed = new ScanInternetSpeed(fragmentNetworkContext);
 
@@ -390,6 +387,7 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                                         startButton.setEnabled(true);
                                         startButton.setTextSize(16);
                                         startButton.setText("Comenzar de nuevo");
+                                        Log.d("SpeedVars","El valor de ping es"+pingTime+" el valor de download es "+downloadSpeed+" el valor de upload es "+uploadSpeed);
                                     }
                                 });
                                 getSpeedTestHostsHandler = null;
@@ -561,12 +559,14 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                                 //Failure
                                 if (pingTest.getAvgRtt() == 0) {
                                     System.out.println("Ping error...");
+                                    pingTime = 0.0;
                                 } else {
                                     //Success
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             pingTextView.setText(dec.format(pingTest.getAvgRtt()) + " ms");
+                                            pingTime=Double.parseDouble(dec.format(pingTest.getAvgRtt()));
                                         }
                                     });
                                 }
@@ -611,12 +611,14 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                                     //Failure
                                     if (downloadTest.getFinalDownloadRate() == 0) {
                                         System.out.println("Download error...");
+                                        downloadSpeed = 0.0;
                                     } else {
                                         //Success
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 downloadTextView.setText(dec.format(downloadTest.getFinalDownloadRate()) + " Mbps");
+                                                downloadSpeed = Double.parseDouble(dec.format(downloadTest.getFinalDownloadRate()));
                                             }
                                         });
                                     }
@@ -673,12 +675,16 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                                     //Failure
                                     if (uploadTest.getFinalUploadRate() == 0) {
                                         System.out.println("Upload error...");
+                                        uploadSpeed = 0.0;
                                     } else {
                                         //Success
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+                                                //Log.d("UploadSpeed","entra a hilo valor de variable "+uploadSpeed);
                                                 uploadTextView.setText(dec.format(uploadTest.getFinalUploadRate()) + " Mbps");
+                                                //uploadSpeed = Double.parseDouble(dec.format(uploadTest.getFinalUploadRate()));
+
                                             }
                                         });
                                     }
@@ -697,6 +703,7 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                                             //rotate.setDuration(100);
                                             //barImageView.startAnimation(rotate);
                                             uploadTextView.setText(dec.format(uploadTest.getInstantUploadRate()) + " Mbps");
+                                            uploadSpeed = Double.parseDouble(dec.format(uploadTest.getFinalUploadRate()));
                                         }
 
                                     });
@@ -765,6 +772,7 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
                                 startButton.setEnabled(true);
                                 startButton.setTextSize(16);
                                 startButton.setText("Comenzar de Nuevo");
+                                Log.d("SpeedVars","El valor de ping es"+pingTime+" el valor de download es "+downloadSpeed+" el valor de upload es "+uploadSpeed);
                             }
                         });
 
@@ -826,50 +834,164 @@ public class FragmentNetworkInfo extends Fragment implements OnMapReadyCallback 
         longitudeOnMap = latLonLocation.second;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        scanMetadata = new ScanMetadata("","","","","","",
-                "","",0,0,0,0,0.0,0.0,0);
+        //scanMetadata = new ScanMetadata("","","","","","",
+                //"","",0,0,0,0,0.0,0.0,0);
 
         scanDbHelper = new ScanDbHelper(getContext());
 
+        //definición de objetos para pintar mapa
+        cursorQuery = scanDbHelper.getAllWcdmaScanInfo();
+        ArrayList<String> queryWcdmaMapFormat = scanDbHelper.getMapWcdmaQuery(cursorQuery);
+        cursorQuery = scanDbHelper.getAllLteScanInfo();
+        ArrayList<String> queryLtemaMapFormat = scanDbHelper.getMapLteQuery(cursorQuery);
+        cursorQuery = scanDbHelper.getAllGsmScanInfo();
+        ArrayList<String> queryGsmMapFormat = scanDbHelper.getMapGsmQuery(cursorQuery);
+        cursorQuery = scanDbHelper.getAllCdmaScanInfo();
+        ArrayList<String> queryCdmaMapFormat = scanDbHelper.getMapCdmaQuery(cursorQuery);
+        if(queryWcdmaMapFormat.size() != 0 ){
+            //Pinta Mapa Wcdma
+            for(int i = 0 ; i < queryWcdmaMapFormat.size(); i++){
+                String[] parts = queryWcdmaMapFormat.get(i).split(";");
+                Log.d("onMapReady","Entra a queryMapFormat en onMapReady valor de i es "+i);
+                String operatorName = parts[0];
+                String phoneNetworType = parts[1];
+                int phoneSignalStrength = Integer.parseInt(parts[2]);
+                String timestamp = parts[3];
+                double latitude = Double.parseDouble(parts[4]);
+                double longitudeMDouble = Double.parseDouble(parts[5]);
+                //String signalQuality = parts[6];
+                Log.d("OnMapReadyVista","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                if(phoneSignalStrength >= VERY_GOOD){
+                    Log.d("OnMapReady VERY_GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_green_s)));
+                }
+                else if(phoneSignalStrength >= GOOD ){
+                    Log.d("OnMapReady GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_yellow_s)));
+                }
+                else if(phoneSignalStrength >= AVERAGE ){
+                    Log.d("OnMapReady AVERAGE","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_orange_s)));
+                }
+                else if(phoneSignalStrength >= BAD ){
+                    Log.d("OnMapReady BAD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_red_s)));
+                }
 
+            }
+        }else if(queryLtemaMapFormat.size() != 0 ){
+            //Pinta Mapa Lte
+            for(int i = 0 ; i < queryLtemaMapFormat.size(); i++){
+                String[] parts = queryLtemaMapFormat.get(i).split(";");
+                Log.d("onMapReady","Entra a queryMapFormat en onMapReady valor de i es "+i);
+                String operatorName = parts[0];
+                String phoneNetworType = parts[1];
+                int phoneSignalStrength = Integer.parseInt(parts[2]);
+                String timestamp = parts[3];
+                double latitude = Double.parseDouble(parts[4]);
+                double longitudeMDouble = Double.parseDouble(parts[5]);
+                //String signalQuality = parts[6];
+                Log.d("OnMapReadyVista","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                if(phoneSignalStrength >= VERY_GOOD){
+                    Log.d("OnMapReady VERY_GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_green_s)));
+                }
+                else if(phoneSignalStrength >= GOOD ){
+                    Log.d("OnMapReady GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_yellow_s)));
+                }
+                else if(phoneSignalStrength >= AVERAGE ){
+                    Log.d("OnMapReady AVERAGE","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_orange_s)));
+                }
+                else if(phoneSignalStrength >= BAD ){
+                    Log.d("OnMapReady BAD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_red_s)));
+                }
 
-        cursorQuery = scanDbHelper.getAllScanInfo();
-        ArrayList<String> queryMapFormat = scanDbHelper.getMapQuery(cursorQuery);
-        for(int i = 0 ; i < queryMapFormat.size(); i++){
-            String[] parts = queryMapFormat.get(i).split(":");
-            Log.d("onMapReady","Entra a queryMapFormat en onMapReady valor de i es "+i);
-            String operatorName = parts[0];
-            String phoneNetworType = parts[1];
-            int phoneSignalStrength = Integer.parseInt(parts[2]);
-            double latitude = Double.parseDouble(parts[3]);
-            double longitudeMDouble = Double.parseDouble(parts[4]);
-            String signalQuality = parts[5].replace(" ","");
-            Log.d("OnMapReady","El valor de signalQUality es : "+signalQuality);
-            if(phoneSignalStrength >= VERY_GOOD){
-                Log.d("OnMapReady VERY_GOOD","El valor de ccccccccccccc signalQUality es : "+signalQuality);
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Latitud: "+latitude+" |longitud: "+longitudeMDouble)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_green_s)));
             }
-            else if(phoneSignalStrength >= GOOD ){
-                Log.d("OnMapReady GOOD","El valor de xddddd signalQUality es : "+signalQuality);
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Latitud: "+latitude+" |longitud: "+longitudeMDouble)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_yellow_s)));
-            }
-            else if(phoneSignalStrength >= AVERAGE ){
-                Log.d("OnMapReady AVERAGE","El valor de sssssssssss signalQUality es : "+signalQuality);
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Latitud: "+latitude+" |longitud: "+longitudeMDouble)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_orange_s)));
-            }
-            else if(phoneSignalStrength >= BAD ){
-                Log.d("OnMapReady BAD","El valor de eeeeeeee signalQUality es : "+signalQuality);
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Latitud: "+latitude+" |longitud: "+longitudeMDouble)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_red_s)));
-            }
+        }else if(queryGsmMapFormat.size() != 0 ){
+            //Pinta Mapa Gsm
+            for(int i = 0 ; i < queryGsmMapFormat.size(); i++){
+                String[] parts = queryGsmMapFormat.get(i).split(";");
+                Log.d("onMapReady","Entra a queryMapFormat en onMapReady valor de i es "+i);
+                String operatorName = parts[0];
+                String phoneNetworType = parts[1];
+                int phoneSignalStrength = Integer.parseInt(parts[2]);
+                String timestamp = parts[3];
+                double latitude = Double.parseDouble(parts[4]);
+                double longitudeMDouble = Double.parseDouble(parts[5]);
+                //String signalQuality = parts[6];
+                Log.d("OnMapReadyVista","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                if(phoneSignalStrength >= VERY_GOOD){
+                    Log.d("OnMapReady VERY_GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_green_s)));
+                }
+                else if(phoneSignalStrength >= GOOD ){
+                    Log.d("OnMapReady GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_yellow_s)));
+                }
+                else if(phoneSignalStrength >= AVERAGE ){
+                    Log.d("OnMapReady AVERAGE","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_orange_s)));
+                }
+                else if(phoneSignalStrength >= BAD ){
+                    Log.d("OnMapReady BAD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_red_s)));
+                }
 
+            }
+        }else if(queryCdmaMapFormat.size() != 0){
+            //Pinta Mapa CDMA
+            for(int i = 0 ; i < queryCdmaMapFormat.size(); i++){
+                String[] parts = queryCdmaMapFormat.get(i).split(";");
+                Log.d("onMapReady","Entra a queryMapFormat en onMapReady valor de i es "+i);
+                String operatorName = parts[0];
+                String phoneNetworType = parts[1];
+                int phoneSignalStrength = Integer.parseInt(parts[2]);
+                String timestamp = parts[3];
+                double latitude = Double.parseDouble(parts[4]);
+                double longitudeMDouble = Double.parseDouble(parts[5]);
+                //String signalQuality = parts[6];
+                Log.d("OnMapReadyVista","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                if(phoneSignalStrength >= VERY_GOOD){
+                    Log.d("OnMapReady VERY_GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_green_s)));
+                }
+                else if(phoneSignalStrength >= GOOD ){
+                    Log.d("OnMapReady GOOD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_yellow_s)));
+                }
+                else if(phoneSignalStrength >= AVERAGE ){
+                    Log.d("OnMapReady AVERAGE","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_orange_s)));
+                }
+                else if(phoneSignalStrength >= BAD ){
+                    Log.d("OnMapReady BAD","OperatorName : "+operatorName+" phoneNetworType "+phoneNetworType+" phoneSignalStrength "+phoneSignalStrength+" timestamp "+timestamp+" latitude "+latitude+" longitudeMDouble "+longitudeMDouble);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitudeMDouble)).title(""+operatorName+"| Red Movil: "+phoneNetworType).snippet(" | Potencia: "+phoneSignalStrength+" | Timestamp : "+timestamp)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_red_s)));
+                }
+
+            }
+        }else{
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(latitudeOnMap,longitudeOnMap)).title("Sin Datos").snippet("Capture para que aparezcan datos en el mapa")
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_green_s)));
         }
-        //googleMap.addMarker(new MarkerOptions().position(new LatLng(latitudeOnMap,longitudeOnMap)).title("Mi caletos").snippet("Espero salir de aqui algún dia :X")
-        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.radio_icon_green_s)));
-
         CameraPosition miLocation = CameraPosition.builder().target(new LatLng(latitudeOnMap,longitudeOnMap)).zoom(12).bearing(0).tilt(45).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(miLocation));
     }
