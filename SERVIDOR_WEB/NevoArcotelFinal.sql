@@ -416,6 +416,92 @@ INSERT INTO `ni_origen_informacion` (`oi_id_origen_informacion`, `oi_descripcion
 	(4, 'bandera');
 /*!40000 ALTER TABLE `ni_origen_informacion` ENABLE KEYS */;
 
+
+-- Volcando estructura para tabla arcoteldb.ni_tipo_tecnologia
+CREATE TABLE IF NOT EXISTS `ni_tipo_tecnologia` (
+  `tt_id_tipo_tecnologia` int(11) NOT NULL,
+  `tt_nombre_tecnologia` varchar(20) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`tt_id_tipo_tecnologia`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Volcando datos para la tabla arcoteldb.ni_tipo_tecnologia: ~5 rows (aproximadamente)
+/*!40000 ALTER TABLE `ni_tipo_tecnologia` DISABLE KEYS */;
+INSERT INTO `ni_tipo_tecnologia` (`tt_id_tipo_tecnologia`, `tt_nombre_tecnologia`) VALUES
+	(1, 'LTE'),
+	(2, 'CDMA'),
+	(3, '3G'),
+	(4, '2G'),
+	(5, 'TODOS');
+/*!40000 ALTER TABLE `ni_tipo_tecnologia` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla arcoteldb.ni_tipo_informacion_recolectada
+CREATE TABLE IF NOT EXISTS `ni_tipo_informacion_recolectada` (
+  `ti_id_tipo_informacion_recolectada` int(11) NOT NULL,
+  `ti_nombre_informacion_recolectada` varchar(50) COLLATE utf8_bin NOT NULL,
+  `ti_descripcion_informacion_recolectada` varchar(50) COLLATE utf8_bin NOT NULL,
+  `ti_id_tipo_tecnologia` int(11) NOT NULL,
+  `ti_id_origen_informacion` int(11) NOT NULL,
+  `ti_visible` bit(1) NOT NULL,
+  PRIMARY KEY (`ti_id_tipo_informacion_recolectada`),
+  KEY `ti_id_tipo_tecnologia_idx` (`ti_id_tipo_tecnologia`),
+  KEY `ti_id_origen_informacion_idx` (`ti_id_origen_informacion`),
+  CONSTRAINT `ti_id_origen_informacion` FOREIGN KEY (`ti_id_origen_informacion`) REFERENCES `ni_origen_informacion` (`oi_id_origen_informacion`),
+  CONSTRAINT `ti_id_tipo_tecnologia` FOREIGN KEY (`ti_id_tipo_tecnologia`) REFERENCES `ni_tipo_tecnologia` (`tt_id_tipo_tecnologia`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Volcando datos para la tabla arcoteldb.ni_tipo_informacion_recolectada: ~46 rows (aproximadamente)
+/*!40000 ALTER TABLE `ni_tipo_informacion_recolectada` DISABLE KEYS */;
+INSERT INTO `ni_tipo_informacion_recolectada` (`ti_id_tipo_informacion_recolectada`, `ti_nombre_informacion_recolectada`, `ti_descripcion_informacion_recolectada`, `ti_id_tipo_tecnologia`, `ti_id_origen_informacion`, `ti_visible`) VALUES
+	(1, 'timestamp', 'timestamp', 5, 1, b'1'),
+	(2, 'countryISO', 'countryISO', 5, 1, b'1'),
+	(3, 'phoneOperatorId', 'phoneOperatorId', 5, 1, b'1'),
+	(4, 'simOperatorId', 'simOperatorId', 5, 1, b'1'),
+	(5, 'operatorMcc', 'operatorMcc', 5, 1, b'1'),
+	(6, 'operatorMnc', 'operatorMnc', 5, 1, b'1'),
+	(7, 'devManufacturer', 'devManufacturer', 5, 1, b'1'),
+	(8, 'devModel', 'devModel', 5, 1, b'1'),
+	(9, 'isConected', 'isConected', 5, 1, b'1'),
+	(10, 'phoneNetStandard', 'phoneNetStandard', 5, 1, b'1'),
+	(11, 'phoneNetTechnology', 'phoneNetTechnology', 5, 1, b'1'),
+	(12, 'internetConNetwork', 'internetConNetwork', 5, 1, b'1'),
+	(13, 'latitude', 'latitude', 5, 1, b'1'),
+	(14, 'longitude', 'longitude', 5, 1, b'1'),
+	(15, 'ping', 'ping', 5, 1, b'1'),
+	(16, 'downloadSpeed', 'downloadSpeed', 5, 1, b'1'),
+	(17, 'uploadSpeed', 'uploadSpeed', 5, 1, b'1'),
+	(18, 'phoneSignalStrength', 'phoneSignalStrength', 5, 2, b'1'),
+	(19, 'phoneAsuStrength', 'phoneAsuStrength', 5, 2, b'1'),
+	(20, 'phoneSignalLevel', 'phoneSignalLevel', 5, 2, b'1'),
+	(21, 'phoneRsrqStrength', 'phoneRsrqStrength', 1, 2, b'1'),
+	(22, 'phoneRsrqStrength', 'phoneRsrqStrength', 1, 2, b'1'),
+	(23, 'phoneRssnrStrength', 'phoneRssnrStrength', 1, 2, b'1'),
+	(24, 'phoneTimingAdvance', 'phoneTimingAdvance', 1, 2, b'1'),
+	(25, 'phoneCqiStrength', 'phoneCqiStrength', 1, 2, b'1'),
+	(26, 'cellWcdmaLac', 'cellWcdmaLac', 3, 3, b'1'),
+	(27, 'cellWcdmaUcid', 'cellWcdmaUcid', 3, 3, b'1'),
+	(28, 'cellWcdmaPsc', 'cellWcdmaPsc', 3, 3, b'1'),
+	(29, 'cellWcdmaCid', 'cellWcdmaCid', 3, 3, b'1'),
+	(30, 'cellWcdmaRnc', 'cellWcdmaRnc', 3, 3, b'1'),
+	(31, 'cellWcdmaUarfcn', 'cellWcdmaUarfcn', 3, 3, b'1'),
+	(32, 'cellGsmLac', 'cellGsmLac', 4, 3, b'1'),
+	(33, 'cellGsmCid', 'cellGsmCid', 4, 3, b'1'),
+	(34, 'cellGsmArcfn', 'cellGsmArcfn', 4, 3, b'1'),
+	(35, 'cellLtePci', 'cellLtePci', 1, 3, b'1'),
+	(36, 'cellLteTac', 'cellLteTac', 1, 3, b'1'),
+	(37, 'cellLteeNode', 'cellLteeNode', 1, 3, b'1'),
+	(38, 'cellLteCid', 'cellLteCid', 1, 3, b'1'),
+	(39, 'cellLteEarfcn', 'cellLteEarfcn', 1, 3, b'1'),
+	(40, 'cellBslat', 'cellBslat', 2, 3, b'1'),
+	(41, 'cellBslon', 'cellBslon', 2, 3, b'1'),
+	(42, 'cellSid', 'cellSid', 2, 3, b'1'),
+	(43, 'cellNid', 'cellNid', 2, 3, b'1'),
+	(44, 'cellBid', 'cellBid', 2, 3, b'1'),
+	(45, 'signalQuality', 'signalQuality', 5, 2, b'1'),
+	(46, 'fieldIsRegistered', 'fieldIsRegistered', 5, 4, b'1');
+/*!40000 ALTER TABLE `ni_tipo_informacion_recolectada` ENABLE KEYS */;
+
+
 -- Volcando estructura para tabla arcoteldb.ni_registro_informacion_recolectada
 CREATE TABLE IF NOT EXISTS `ni_registro_informacion_recolectada` (
   `ri_id_registro_informacion_red` int(11) NOT NULL AUTO_INCREMENT,
@@ -545,88 +631,6 @@ INSERT INTO `ni_registro_informacion_recolectada` (`ri_id_registro_informacion_r
 	(140, 46, '0', NULL, NULL);
 /*!40000 ALTER TABLE `ni_registro_informacion_recolectada` ENABLE KEYS */;
 
--- Volcando estructura para tabla arcoteldb.ni_tipo_informacion_recolectada
-CREATE TABLE IF NOT EXISTS `ni_tipo_informacion_recolectada` (
-  `ti_id_tipo_informacion_recolectada` int(11) NOT NULL,
-  `ti_nombre_informacion_recolectada` varchar(50) COLLATE utf8_bin NOT NULL,
-  `ti_descripcion_informacion_recolectada` varchar(50) COLLATE utf8_bin NOT NULL,
-  `ti_id_tipo_tecnologia` int(11) NOT NULL,
-  `ti_id_origen_informacion` int(11) NOT NULL,
-  `ti_visible` bit(1) NOT NULL,
-  PRIMARY KEY (`ti_id_tipo_informacion_recolectada`),
-  KEY `ti_id_tipo_tecnologia_idx` (`ti_id_tipo_tecnologia`),
-  KEY `ti_id_origen_informacion_idx` (`ti_id_origen_informacion`),
-  CONSTRAINT `ti_id_origen_informacion` FOREIGN KEY (`ti_id_origen_informacion`) REFERENCES `ni_origen_informacion` (`oi_id_origen_informacion`),
-  CONSTRAINT `ti_id_tipo_tecnologia` FOREIGN KEY (`ti_id_tipo_tecnologia`) REFERENCES `ni_tipo_tecnologia` (`tt_id_tipo_tecnologia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- Volcando datos para la tabla arcoteldb.ni_tipo_informacion_recolectada: ~46 rows (aproximadamente)
-/*!40000 ALTER TABLE `ni_tipo_informacion_recolectada` DISABLE KEYS */;
-INSERT INTO `ni_tipo_informacion_recolectada` (`ti_id_tipo_informacion_recolectada`, `ti_nombre_informacion_recolectada`, `ti_descripcion_informacion_recolectada`, `ti_id_tipo_tecnologia`, `ti_id_origen_informacion`, `ti_visible`) VALUES
-	(1, 'timestamp', 'timestamp', 5, 1, b'1'),
-	(2, 'countryISO', 'countryISO', 5, 1, b'1'),
-	(3, 'phoneOperatorId', 'phoneOperatorId', 5, 1, b'1'),
-	(4, 'simOperatorId', 'simOperatorId', 5, 1, b'1'),
-	(5, 'operatorMcc', 'operatorMcc', 5, 1, b'1'),
-	(6, 'operatorMnc', 'operatorMnc', 5, 1, b'1'),
-	(7, 'devManufacturer', 'devManufacturer', 5, 1, b'1'),
-	(8, 'devModel', 'devModel', 5, 1, b'1'),
-	(9, 'isConected', 'isConected', 5, 1, b'1'),
-	(10, 'phoneNetStandard', 'phoneNetStandard', 5, 1, b'1'),
-	(11, 'phoneNetTechnology', 'phoneNetTechnology', 5, 1, b'1'),
-	(12, 'internetConNetwork', 'internetConNetwork', 5, 1, b'1'),
-	(13, 'latitude', 'latitude', 5, 1, b'1'),
-	(14, 'longitude', 'longitude', 5, 1, b'1'),
-	(15, 'ping', 'ping', 5, 1, b'1'),
-	(16, 'downloadSpeed', 'downloadSpeed', 5, 1, b'1'),
-	(17, 'uploadSpeed', 'uploadSpeed', 5, 1, b'1'),
-	(18, 'phoneSignalStrength', 'phoneSignalStrength', 5, 2, b'1'),
-	(19, 'phoneAsuStrength', 'phoneAsuStrength', 5, 2, b'1'),
-	(20, 'phoneSignalLevel', 'phoneSignalLevel', 5, 2, b'1'),
-	(21, 'phoneRsrqStrength', 'phoneRsrqStrength', 1, 2, b'1'),
-	(22, 'phoneRsrqStrength', 'phoneRsrqStrength', 1, 2, b'1'),
-	(23, 'phoneRssnrStrength', 'phoneRssnrStrength', 1, 2, b'1'),
-	(24, 'phoneTimingAdvance', 'phoneTimingAdvance', 1, 2, b'1'),
-	(25, 'phoneCqiStrength', 'phoneCqiStrength', 1, 2, b'1'),
-	(26, 'cellWcdmaLac', 'cellWcdmaLac', 3, 3, b'1'),
-	(27, 'cellWcdmaUcid', 'cellWcdmaUcid', 3, 3, b'1'),
-	(28, 'cellWcdmaPsc', 'cellWcdmaPsc', 3, 3, b'1'),
-	(29, 'cellWcdmaCid', 'cellWcdmaCid', 3, 3, b'1'),
-	(30, 'cellWcdmaRnc', 'cellWcdmaRnc', 3, 3, b'1'),
-	(31, 'cellWcdmaUarfcn', 'cellWcdmaUarfcn', 3, 3, b'1'),
-	(32, 'cellGsmLac', 'cellGsmLac', 4, 3, b'1'),
-	(33, 'cellGsmCid', 'cellGsmCid', 4, 3, b'1'),
-	(34, 'cellGsmArcfn', 'cellGsmArcfn', 4, 3, b'1'),
-	(35, 'cellLtePci', 'cellLtePci', 1, 3, b'1'),
-	(36, 'cellLteTac', 'cellLteTac', 1, 3, b'1'),
-	(37, 'cellLteeNode', 'cellLteeNode', 1, 3, b'1'),
-	(38, 'cellLteCid', 'cellLteCid', 1, 3, b'1'),
-	(39, 'cellLteEarfcn', 'cellLteEarfcn', 1, 3, b'1'),
-	(40, 'cellBslat', 'cellBslat', 2, 3, b'1'),
-	(41, 'cellBslon', 'cellBslon', 2, 3, b'1'),
-	(42, 'cellSid', 'cellSid', 2, 3, b'1'),
-	(43, 'cellNid', 'cellNid', 2, 3, b'1'),
-	(44, 'cellBid', 'cellBid', 2, 3, b'1'),
-	(45, 'signalQuality', 'signalQuality', 5, 2, b'1'),
-	(46, 'fieldIsRegistered', 'fieldIsRegistered', 5, 4, b'1');
-/*!40000 ALTER TABLE `ni_tipo_informacion_recolectada` ENABLE KEYS */;
-
--- Volcando estructura para tabla arcoteldb.ni_tipo_tecnologia
-CREATE TABLE IF NOT EXISTS `ni_tipo_tecnologia` (
-  `tt_id_tipo_tecnologia` int(11) NOT NULL,
-  `tt_nombre_tecnologia` varchar(20) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`tt_id_tipo_tecnologia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- Volcando datos para la tabla arcoteldb.ni_tipo_tecnologia: ~5 rows (aproximadamente)
-/*!40000 ALTER TABLE `ni_tipo_tecnologia` DISABLE KEYS */;
-INSERT INTO `ni_tipo_tecnologia` (`tt_id_tipo_tecnologia`, `tt_nombre_tecnologia`) VALUES
-	(1, 'LTE'),
-	(2, 'CDMA'),
-	(3, '3G'),
-	(4, '2G'),
-	(5, 'TODOS');
-/*!40000 ALTER TABLE `ni_tipo_tecnologia` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
