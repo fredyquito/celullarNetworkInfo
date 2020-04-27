@@ -1,0 +1,933 @@
+import pymysql
+from app import app
+from db_config import mysql
+from flask import jsonify
+from flask import flash, request
+
+@app.route('/add', methods=['POST'])
+def add_user():
+    try:
+        _json = request.json
+        _countryiso = _json['countryiso']
+        _operatorid = _json['operatorid']
+        _operatorname = _json['operatorname']
+        _isconected = _json['isconected']
+        _phonesignaltype = _json['phonesignaltype']
+        _phonenetworktype = _json['phonenetworktype']
+        _signalquality = _json['signalquality']
+        _networkconectivitytype = _json['networkconectivitytype']
+        _phonesignalstrength = _json['phonesignalstrength']
+        _downloadmovilespeed = _json['downloadmovilespeed']
+        _uploadmovilspeed = _json['uploadmovilspeed']
+        _wifispeed = _json['wifispeed']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
+        # validate the received values
+        if _countryiso and _operatorid and _operatorname and _isconected and _phonesignaltype and _phonenetworktype and _signalquality and _networkconectivitytype and _phonesignalstrength and _downloadmovilespeed and _uploadmovilspeed and _wifispeed and _latitude and _longitude and request.method == 'POST':
+            #do not save password as a plain text
+            #_hashed_password = generate_password_hash(_password)
+            # save edits
+            sql = "INSERT INTO cellularscantb(countryiso, operatorid, operatorname, isconected, phonesignaltype, phonenetworktype, signalquality, networkconectivitytype, phonesignalstrength, downloadmovilespeed, uploadmovilspeed, wifispeed, latitude, longitude ) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            data = (_countryiso, _operatorid, _operatorname, _isconected, _phonesignaltype, _phonenetworktype, _signalquality, _networkconectivitytype, _phonesignalstrength, _downloadmovilespeed, _uploadmovilspeed, _wifispeed, _latitude, _longitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = jsonify('registro credado satisfactoriamente!')
+            resp.status_code = 200
+            return resp
+        else:
+            return not_found()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/addlte', methods=['POST'])
+def add_lte():
+    try:
+        _json = request.json
+        _timestamp = _json['timestamp']
+        _countryISO = _json['countryISO']
+        _phoneOperatorId = _json['phoneOperatorId']
+        _simOperatorId = _json['simOperatorId']
+        _operatorMcc = _json['operatorMcc']
+        _operatorMnc = _json['operatorMnc']
+        _devManufacturer = _json['devManufacturer']
+        _devModel = _json['devModel']
+        _isConected = _json['isConected']
+        _phoneNetStandard = _json['phoneNetStandard']
+        _phoneNetTechnology = _json['phoneNetTechnology']
+        _internetConNetwork = _json['internetConNetwork']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
+        _pingTimeMilis = _json['pingTimeMilis']
+        _downloadSpeed = _json['downloadSpeed']
+        _uploadSpeed = _json['uploadSpeed']
+        _phoneSignalStrength = _json['phoneSignalStrength']
+        _phoneAsuStrength = _json['phoneAsuStrength']
+        _phoneSignalLevel = _json['phoneSignalLevel']
+        _phoneRsrpStrength = _json['phoneRsrpStrength']
+        _phoneRsrqStrength = _json['phoneRsrqStrength']
+        _phoneRssnrStrength = _json['phoneRssnrStrength']
+        _phoneTimingAdvance = _json['phoneTimingAdvance']
+        _phoneCqiStrength = _json['phoneCqiStrength']
+        _cellLtePci = _json['cellLtePci']
+        _cellLteTac = _json['cellLteTac']
+        _cellLteeNodeB = _json['cellLteeNodeB']
+        _cellLteCid = _json['cellLteCid']
+        _cellLteEarfcn = _json['cellLteEarfcn']
+        _signalQuality = _json['signalQuality']
+        _fieldIsRegistered = _json['fieldIsRegistered']
+        # validate the received values
+        if _timestamp and _countryISO and _phoneOperatorId and _simOperatorId and _operatorMcc and _operatorMnc and _devManufacturer and _devModel and _isConected and _phoneNetStandard and _phoneNetTechnology and _internetConNetwork and _latitude and _longitude and _pingTimeMilis and _downloadSpeed and _uploadSpeed and _phoneSignalStrength and _phoneAsuStrength and _phoneSignalLevel and _phoneRsrpStrength and _phoneRsrqStrength and _phoneRssnrStrength and _phoneTimingAdvance and _phoneCqiStrength and _cellLtePci and _cellLteTac and _cellLteeNodeB and _cellLteCid and _cellLteEarfcn and _signalQuality and _fieldIsRegistered and request.method == 'POST':
+            #do not save password as a plain text
+            #_hashed_password = generate_password_hash(_password)
+            # save edits
+            #sql = "INSERT INTO cellularscantb(timestamp, countryISO, phoneOperatorId, simOperatorId, operatorMcc, operatorMnc, devManufacturer, devModel, isConected, phoneNetStandard, phoneNetTechnology, internetConNetwork, latitude, longitude, pingTimeMilis, downloadSpeed, uploadSpeed, phoneSignalStrength, phoneAsuStrength, phoneSignalLevel, phoneRsrpStrength, phoneRsrqStrength, phoneRssnrStrength, phoneTimingAdvance, phoneCqiStrength, cellLtePci, cellLteTac, cellLteeNodeB, cellLteCid, cellLteEarfcn, signalQuality, fieldIsRegistered ) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            #data = (_timestamp, _countryISO, _phoneOperatorId, _simOperatorId, _operatorMcc, _operatorMnc, _devManufacturer, _devModel, _isConected, _phoneNetStandard, _phoneNetTechnology, _internetConNetwork, _latitude, _longitude, _pingTimeMilis, _downloadSpeed, _uploadSpeed, _phoneSignalStrength, _phoneAsuStrength, _phoneSignalLevel, _phoneRsrpStrength, _phoneRsrqStrength, _phoneRssnrStrength, _phoneTimingAdvance, _phoneCqiStrength, _cellLtePci, _cellLteTac, _cellLteeNodeB, _cellLteCid, _cellLteEarfcn, _signalQuality, _fieldIsRegistered,)
+            #conn = mysql.connect()
+            #cursor = conn.cursor()
+            #cursor.execute(sql, data)
+            #conn.commit()
+            sql = "INSERT INTO ni_registro_informacion_recolectada(ri_id_tipo_informacion_recolectada, ri_valor) VALUES(%s, %s)"
+            data = (1, _timestamp,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (2, _countryISO,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (3, _phoneOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (4, _simOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (5, _operatorMcc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (6, _operatorMnc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (7, _devManufacturer,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (8, _devModel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (9, _isConected,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (10, _phoneNetStandard,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (11, _phoneNetTechnology,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (12, _internetConNetwork,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (13, _latitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (14, _longitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (15, _pingTimeMilis)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (16, _downloadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (17, _uploadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (18, _phoneSignalStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (19, _phoneAsuStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (20, _phoneSignalLevel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (21, _phoneRsrqStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (22, _phoneRsrqStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (23, _phoneRssnrStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (24, _phoneTimingAdvance,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (25, _phoneCqiStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (35, _cellLtePci,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (36, _cellLteTac,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (37, _cellLteeNode,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (38, _cellLteCid,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (39, _cellLteEarfcn,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (45, _signalQuality,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (46, _fieldIsRegistered,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = jsonify('registro lte credado satisfactoriamente!')
+            resp.status_code = 200
+            return resp
+        else:
+            return not_found()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/addwcdma', methods=['POST'])
+def add_wcdma():
+    try:
+        _json = request.json
+        _timestamp = _json['timestamp']
+        _countryISO = _json['countryISO']
+        _phoneOperatorId = _json['phoneOperatorId']
+        _simOperatorId = _json['simOperatorId']
+        _operatorMcc = _json['operatorMcc']
+        _operatorMnc = _json['operatorMnc']
+        _devManufacturer = _json['devManufacturer']
+        _devModel = _json['devModel']
+        _isConected = _json['isConected']
+        _phoneNetStandard = _json['phoneNetStandard']
+        _phoneNetTechnology = _json['phoneNetTechnology']
+        _internetConNetwork = _json['internetConNetwork']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
+        _pingTimeMilis = _json['pingTimeMilis']
+        _downloadSpeed = _json['downloadSpeed']
+        _uploadSpeed = _json['uploadSpeed']
+        _phoneSignalStrength = _json['phoneSignalStrength']
+        _phoneAsuStrength = _json['phoneAsuStrength']
+        _phoneSignalLevel = _json['phoneSignalLevel']
+        _cellWcdmaLac = _json['cellWcdmaLac']
+        _cellWcdmaUcid = _json['cellWcdmaUcid']
+        _cellWcdmaPsc = _json['cellWcdmaPsc']
+        _cellWcdmaCid = _json['cellWcdmaCid']
+        _cellWcdmaRnc = _json['cellWcdmaRnc']
+        _cellWcdmaUarfcn = _json['cellWcdmaUarfcn']
+        _signalQuality = _json['signalQuality']
+        _fieldIsRegistered = _json['fieldIsRegistered']
+
+        # validate the received values
+        if _timestamp and _countryISO and _phoneOperatorId and _simOperatorId and _operatorMcc and _operatorMnc and _devManufacturer and _devModel and _isConected and _phoneNetStandard and _phoneNetTechnology and _internetConNetwork and _latitude and _longitude and _pingTimeMilis and _downloadSpeed and _uploadSpeed and _phoneSignalStrength and _phoneAsuStrength and _phoneSignalLevel and _cellWcdmaLac and _cellWcdmaUcid and _cellWcdmaPsc and _cellWcdmaCid and _cellWcdmaRnc and _cellWcdmaUarfcn and _signalQuality and _fieldIsRegistered and request.method == 'POST':
+            #do not save password as a plain text
+            #_hashed_password = generate_password_hash(_password)
+            # save edits
+            #sql = "INSERT INTO cellularscantb(timestamp, countryISO, phoneOperatorId, simOperatorId, operatorMcc, operatorMnc, devManufacturer, devModel, isConected, phoneNetStandard, phoneNetTechnology, internetConNetwork, latitude, longitude, pingTimeMilis, downloadSpeed, uploadSpeed, phoneSignalStrength, phoneAsuStrength, phoneSignalLevel, cellWcdmaLac, cellWcdmaUcid, cellWcdmaPsc, cellWcdmaCid, cellWcdmaRnc, cellWcdmaUarfcn, signalQuality, fieldIsRegistered) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            #data = (_timestamp, _countryISO, _phoneOperatorId, _simOperatorId, _operatorMcc, _operatorMnc, _devManufacturer, _devModel, _isConected, _phoneNetStandard, _phoneNetTechnology, _internetConNetwork, _latitude, _longitude, _pingTimeMilis, _downloadSpeed, _uploadSpeed, _phoneSignalStrength, _phoneAsuStrength, _phoneSignalLevel, _cellWcdmaLac, _cellWcdmaUcid, _cellWcdmaPsc, _cellWcdmaCid, _cellWcdmaRnc, _cellWcdmaUarfcn, _signalQuality, _fieldIsRegistered,)
+            #conn = mysql.connect()
+            #cursor = conn.cursor()
+            #cursor.execute(sql, data)
+            #conn.commit()
+            sql = "INSERT INTO ni_registro_informacion_recolectada(ri_id_tipo_informacion_recolectada, ri_valor) VALUES(%s, %s)"
+            data = (1, _timestamp,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (2, _countryISO,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (3, _phoneOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (4, _simOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (5, _operatorMcc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (6, _operatorMnc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (7, _devManufacturer,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (8, _devModel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (9, _isConected,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (10, _phoneNetStandard,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (11, _phoneNetTechnology,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (12, _internetConNetwork,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (13, _latitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (14, _longitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (15, _pingTimeMilis)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (16, _downloadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (17, _uploadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (18, _phoneSignalStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (19, _phoneAsuStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (20, _phoneSignalLevel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (26, _cellWcdmaLac,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (27, _cellWcdmaUcid,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (28, _cellWcdmaPsc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (29, _cellWcdmaCid,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (30, _cellWcdmaRnc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (31, _cellWcdmaUarfcn,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (45, _signalQuality,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (46, _fieldIsRegistered,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = jsonify('registro credado satisfactoriamente!')
+            resp.status_code = 200
+            return resp
+        else:
+            return not_found()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/addgsm', methods=['POST'])
+def add_gsm():
+    try:
+        _json = request.json
+        _timestamp = _json['timestamp']
+        _countryISO = _json['countryISO']
+        _phoneOperatorId = _json['phoneOperatorId']
+        _simOperatorId = _json['simOperatorId']
+        _operatorMcc = _json['operatorMcc']
+        _operatorMnc = _json['operatorMnc']
+        _devManufacturer = _json['devManufacturer']
+        _devModel = _json['devModel']
+        _isConected = _json['isConected']
+        _phoneNetStandard = _json['phoneNetStandard']
+        _phoneNetTechnology = _json['phoneNetTechnology']
+        _internetConNetwork = _json['internetConNetwork']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
+        _pingTimeMilis = _json['pingTimeMilis']
+        _downloadSpeed = _json['downloadSpeed']
+        _uploadSpeed = _json['uploadSpeed']
+        _phoneSignalStrength = _json['phoneSignalStrength']
+        _phoneAsuStrength = _json['phoneAsuStrength']
+        _phoneSignalLevel = _json['phoneSignalLevel']
+        _cellGsmLac = _json['cellGsmLac']
+        _cellGsmCid = _json['cellGsmCid']
+        _cellGsmArcfn = _json['cellGsmArcfn']
+        _signalQuality = _json['signalQuality']
+        _fieldIsRegistered = _json['fieldIsRegistered']
+
+        # validate the received values
+        if _timestamp and _countryISO and _phoneOperatorId and _simOperatorId and _operatorMcc and _operatorMnc and _devManufacturer and _devModel and _isConected and _phoneNetStandard and _phoneNetTechnology and _internetConNetwork and _latitude and _longitude and _pingTimeMilis and _downloadSpeed and _uploadSpeed and _phoneSignalStrength and _phoneAsuStrength and _phoneSignalLevel and _cellGsmLac and _cellGsmCid and _cellGsmArcfn and _signalQuality and _fieldIsRegistered and request.method == 'POST':
+            #do not save password as a plain text
+            #_hashed_password = generate_password_hash(_password)
+            # save edits
+            #sql = "INSERT INTO cellularscantb(timestamp, countryISO, phoneOperatorId, simOperatorId, operatorMcc, operatorMnc, devManufacturer, devModel, isConected, phoneNetStandard, phoneNetTechnology, internetConNetwork, latitude, longitude, pingTimeMilis, downloadSpeed, uploadSpeed, phoneSignalStrength, phoneAsuStrength, phoneSignalLevel, cellGsmLac, cellGsmCid, cellGsmArcfn, signalQuality, fieldIsRegistered) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            #data = (_timestamp, _countryISO, _phoneOperatorId, _simOperatorId, _operatorMcc, _operatorMnc, _devManufacturer, _devModel, _isConected, _phoneNetStandard, _phoneNetTechnology, _internetConNetwork, _latitude, _longitude, _pingTimeMilis, _downloadSpeed, _uploadSpeed, _phoneSignalStrength, _phoneAsuStrength, _phoneSignalLevel, _cellGsmLac, _cellGsmCid, _cellGsmArcfn, _signalQuality, _fieldIsRegistered,)
+            #conn = mysql.connect()
+            #cursor = conn.cursor()
+            #cursor.execute(sql, data)
+            #conn.commit()
+            sql = "INSERT INTO ni_registro_informacion_recolectada(ri_id_tipo_informacion_recolectada, ri_valor) VALUES(%s, %s)"
+            data = (1, _timestamp,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (2, _countryISO,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (3, _phoneOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (4, _simOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (5, _operatorMcc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (6, _operatorMnc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (7, _devManufacturer,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (8, _devModel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (9, _isConected,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (10, _phoneNetStandard,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (11, _phoneNetTechnology,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (12, _internetConNetwork,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (13, _latitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (14, _longitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (15, _pingTimeMilis)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (16, _downloadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (17, _uploadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (18, _phoneSignalStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (19, _phoneAsuStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (20, _phoneSignalLevel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (32, _cellGsmLac,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (33, _cellGsmCid,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (34, _cellGsmArcfn,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (45, _signalQuality,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (46, _fieldIsRegistered,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = jsonify('registro 2G credado satisfactoriamente!')
+            resp.status_code = 200
+            return resp
+        else:
+            return not_found()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/addcdma', methods=['POST'])
+def add_cdma():
+    try:
+        _json = request.json
+        _timestamp = _json['timestamp']
+        _countryISO = _json['countryISO']
+        _phoneOperatorId = _json['phoneOperatorId']
+        _simOperatorId = _json['simOperatorId']
+        _operatorMcc = _json['operatorMcc']
+        _operatorMnc = _json['operatorMnc']
+        _devManufacturer = _json['devManufacturer']
+        _devModel = _json['devModel']
+        _isConected = _json['isConected']
+        _phoneNetStandard = _json['phoneNetStandard']
+        _phoneNetTechnology = _json['phoneNetTechnology']
+        _internetConNetwork = _json['internetConNetwork']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
+        _pingTimeMilis = _json['pingTimeMilis']
+        _downloadSpeed = _json['downloadSpeed']
+        _uploadSpeed = _json['uploadSpeed']
+        _phoneSignalStrength = _json['phoneSignalStrength']
+        _phoneAsuStrength = _json['phoneAsuStrength']
+        _phoneSignalLevel = _json['phoneSignalLevel']
+        _cellBslat = _json['cellBslat']
+        _cellBslon = _json['cellBslon']
+        _cellSid = _json['cellSid']
+        _cellNid = _json['cellNid']
+        _cellBid = _json['cellBid']
+        _signalQuality = _json['signalQuality']
+        _fieldIsRegistered = _json['fieldIsRegistered']
+
+        # validate the received values
+        if _timestamp and _countryISO and _phoneOperatorId and _simOperatorId and _operatorMcc and _operatorMnc and _devManufacturer and _devModel and _isConected and _phoneNetStandard and _phoneNetTechnology and _internetConNetwork and _latitude and _longitude and _pingTimeMilis and _downloadSpeed and _uploadSpeed and _phoneSignalStrength and _phoneAsuStrength and _phoneSignalLevel and _cellBslat and _cellBslon and _cellSid and _cellNid and _cellBid and _signalQuality and _fieldIsRegistered and request.method == 'POST':
+            #do not save password as a plain text
+            #_hashed_password = generate_password_hash(_password)
+            # save edits
+            #sql = "timestamp, countryISO, phoneOperatorId, simOperatorId, operatorMcc, operatorMnc, devManufacturer, devModel, isConected, phoneNetStandard, phoneNetTechnology, internetConNetwork, latitude, longitude, pingTimeMilis, downloadSpeed, uploadSpeed, phoneSignalStrength, phoneAsuStrength, phoneSignalLevel, cellBslat, cellBslon, cellSid, cellNid, cellBid, signalQuality, fieldIsRegistered) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            #data = (_timestamp, _countryISO, _phoneOperatorId, _simOperatorId, _operatorMcc, _operatorMnc, _devManufacturer, _devModel, _isConected, _phoneNetStandard, _phoneNetTechnology, _internetConNetwork, _latitude, _longitude, _pingTimeMilis, _downloadSpeed, _uploadSpeed, _phoneSignalStrength, _phoneAsuStrength, _phoneSignalLevel, _cellBslat, _cellBslon, _cellSid, _cellNid, _cellBid, _signalQuality, _fieldIsRegistered,)
+            #conn = mysql.connect()
+            #cursor = conn.cursor()
+            #cursor.execute(sql, data)
+            #conn.commit()
+            sql = "INSERT INTO ni_registro_informacion_recolectada(ri_id_tipo_informacion_recolectada, ri_valor) VALUES(%s, %s)"
+            data = (1, _timestamp,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (2, _countryISO,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (3, _phoneOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (4, _simOperatorId,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (5, _operatorMcc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (6, _operatorMnc,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (7, _devManufacturer,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (8, _devModel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (9, _isConected,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (10, _phoneNetStandard,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (11, _phoneNetTechnology,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (12, _internetConNetwork,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (13, _latitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (14, _longitude,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (15, _pingTimeMilis)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (16, _downloadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (17, _uploadSpeed,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (18, _phoneSignalStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (19, _phoneAsuStrength,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (20, _phoneSignalLevel,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (40, _cellBslat,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (41, _cellBslon,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (42, _cellSid,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (43, _cellNid,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (44, _cellBid,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (45, _signalQuality,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            data = (46, _fieldIsRegistered,)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = jsonify('registro CDMA credado satisfactoriamente!')
+            resp.status_code = 200
+            return resp
+        else:
+            return not_found()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/getdata')
+def users():
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM cellularscantb")
+        rows = cursor.fetchall()
+        resp = jsonify(rows)
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/getdata/<int:id>')
+def user(id):
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM cellularscantb WHERE scanid=%s", id)
+        row = cursor.fetchone()
+        resp = jsonify(row)
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/update', methods=['POST'])
+def update_user():
+    try:
+        _json = request.json
+        _countryiso = _json['countryiso']
+        _operatorid = _json['operatorid']
+        _operatorname = _json['operatorname']
+        _isconected = _json['isconected']
+        _phonesignaltype = _json['phonesignaltype']
+        _phonenetworktype = _json['phonenetworktype']
+        _signalquality = _json['signalquality']
+        _networkconectivitytype = _json['networkconectivitytype']
+        _phonesignalstrength = _json['phonesignalstrength']
+        _downloadmovilespeed = _json['downloadmovilespeed']
+        _uploadmovilspeed = _json['uploadmovilspeed']
+        _wifispeed = _json['wifispeed']
+        _latitude = _json['latitude']
+        _longitude = _json['longitude']
+        # validate the received values
+        if _countryiso and _operatorid and _operatorname and _isconected and _phonesignaltype and _phonenetworktype and _signalquality and _networkconectivitytype and _phonesignalstrength and _downloadmovilespeed and _uploadmovilspeed and _wifispeed and _latitude and _longitude and request.method == 'POST':
+            #do not save password as a plain text
+            #_hashed_password = generate_password_hash(_password)
+            # save edits
+            sql = "UPDATE cellularscantb SET _countryiso=%s,  _operatorid=%s,  _operatorname=%s,  _isconected=%s,  _phonesignaltype=%s,  _phonenetworktype=%s,  _signalquality=%s,  _networkconectivitytype=%s,  _phonesignalstrength=%s,  _downloadmovilespeed=%s,  _uploadmovilspeed=%s,  _wifispeed=%s,  _latitude=%s,  _longitude=%s WHERE user_id=%s"
+            data = (_countryiso, _operatorid, _operatorname, _isconected, _phonesignaltype, _phonenetworktype, _signalquality, _networkconectivitytype, _phonesignalstrength, _downloadmovilespeed, _uploadmovilspeed, _wifispeed, _latitude, _longitude, _id)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            resp = jsonify('registro creado satisfactoriamente')
+            resp.status_code = 200
+            return resp
+        else:
+            return not_found()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/delete/<int:id>')
+def delete_user(id):
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM cellularscantb WHERE user_id=%s", (id,))
+        conn.commit()
+        resp = jsonify('registro borrado satisfactoriamente!')
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.errorhandler(404)
+def not_found(error=None):
+    message = {
+        'status': 404,
+        'message': 'Not Found: ' + request.url,
+    }
+    resp = jsonify(message)
+    resp.status_code = 404
+
+    return resp
+
+if __name__ == "__main__":
+    app.run(host = '0.0.0.0',port=5005)
